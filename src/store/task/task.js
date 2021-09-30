@@ -23,7 +23,7 @@ const state = {
 
                 {
                     id: 2
-                }
+                } 
             ],
 
             createdDate: '05.05.2021',
