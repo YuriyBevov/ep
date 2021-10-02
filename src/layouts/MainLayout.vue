@@ -55,11 +55,41 @@
 
             <q-item clickable v-ripple :to="'/opened_tasks'">
               <q-item-section avatar>
-                <q-icon name="task" color="primary"/>
+                <q-icon name="contact_support" color="primary"/>
               </q-item-section>
 
               <q-item-section>
                 Открытые задачи
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple :to="'/all_tasks'">
+              <q-item-section avatar>
+                <q-icon name="list" color="primary"/>
+              </q-item-section>
+
+              <q-item-section>
+                Список всех задач
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple :to="'/done_tasks'">
+              <q-item-section avatar>
+                <q-icon name="done" color="primary"/>
+              </q-item-section>
+
+              <q-item-section>
+                Выполненные задачи
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple :to="'/archived_tasks'">
+              <q-item-section avatar>
+                <q-icon name="archive" color="primary"/>
+              </q-item-section>
+
+              <q-item-section>
+                Архив задач
               </q-item-section>
             </q-item>
 
@@ -92,22 +122,32 @@
 
   export default {
 
-    data() {
-      return {
-        drawer: false,
+      data() {
+          return {
+              drawer: false,
 
-        isUser: true,
+              isUser: true,
+          }
+      },
+
+      computed: {
+          ...mapGetters('user', ['activeUser', 'userRole'])
+      },
+
+      methods: {
+          ...mapActions('task', ['GET_TASK_LIST']),
+
+          getTaskList() {
+              this.GET_TASK_LIST()
+          },
+          
+          logout() {
+              console.log('logout')
+          }
+      },
+
+      mounted() {
+          this.getTaskList()
       }
-    },
-
-    computed: {
-      ...mapGetters('auth', ['activeUser', 'userRole'])
-    },
-
-    methods: {
-      logout() {
-        console.log('logout')
-      }
-    }
   }
 </script>

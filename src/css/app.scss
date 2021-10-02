@@ -1,1 +1,16 @@
 // app global css in SCSS form
+
+.cmn{
+    &__list {
+        margin: 0;
+        list-style: none;
+    }
+
+    &__text {
+        &--ellipsys {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
+}

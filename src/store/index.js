@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import auth from './auth/auth.js'
+import user from './user/user.js'
 import task from './task/task.js'
 
 Vue.use(Vuex)
@@ -18,6 +19,7 @@ Vue.use(Vuex)
 const Store = new Vuex.Store({
   modules: {
     auth,
+    user,
     task,
   },
 
