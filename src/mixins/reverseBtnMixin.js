@@ -3,6 +3,10 @@
 import ReverseBtn from 'src/components/COMMON/ReverseBtn'
 
 export const reverseBtnMixin = {
+    props: {
+        reverseStatus: { type: Boolean }
+    },
+
     components: {
         ReverseBtn
     },
@@ -14,7 +18,7 @@ export const reverseBtnMixin = {
     },
 
     methods: {
-        setReverseStatus(value) {
+        reverse(value) {
             console.log(this.isReversed)
             this.isReversed = value
         }

@@ -8,7 +8,7 @@
 
         methods: {
             emitReverseStatus() {
-                this.$emit('reverse')
+                this.$emit('reverse', this.isReversed = true)
             }
         }
     }

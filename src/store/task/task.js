@@ -45,7 +45,7 @@ let tasks = [
         },
         
         //дата сдачи
-        expDate: new Date('03.03.2019'),
+        expDate: new Date('3.13.2019'),
 
         //кфф срочночти выполнения
         urgentState: 5,
@@ -104,7 +104,7 @@ let tasks = [
         },
         
         //дата сдачи
-        expDate: new Date('04.03.2019'),
+        expDate: new Date('02.11.2019'),
 
         //кфф срочночти выполнения
         urgentState: 7,
@@ -281,7 +281,7 @@ let tasks = [
         },
         
         //дата сдачи
-        expDate: new Date('07.03.2019'),
+        expDate: new Date('02.03.2019'),
 
         //кфф срочночти выполнения
         urgentState: 3,

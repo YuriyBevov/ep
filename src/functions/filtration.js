@@ -25,10 +25,10 @@ export function filtration(searchOpt = null, filterOpt = null, sortOpt = null, i
         });
     }
     
-    /*if(isReversed) {
+    if(isReversed) {
         console.log('rev', isReversed)
         result.reverse()
-    }*/
+    }
     
     return result 
 }

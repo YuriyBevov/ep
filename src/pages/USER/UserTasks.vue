@@ -58,13 +58,16 @@
 
             <div class="user-tasks__reverse">
                 <!-- компонент реверсивной кнопки -->
-                <ReverseBtn
+                <!-- <ReverseBtn
+                    :reverseStatus="isReversed"
                     @reverse="reverse"
-                />
+                />-->
+
+                <q-btn @click="reverse" icon="height"/>
             </div>
         </div>
 
-        <q-list class="flex user-tasks__list" :style="!this.cardView ? 'flex-direction: column;' : null">
+        <q-list class="flex user-tasks__list" :style="!this.cardView ? 'flex-direction: column;' : null" v-if="filteredTasks.length">
             <q-item
                 class="user-tasks__item"
                 :class="!cardView ? 'q-mb-xs q-mr-none' : 'q-mb-lg q-mr-lg'"
@@ -75,13 +78,14 @@
                 style="height: fit-content;"
                 :style="!cardView ? 'max-width: 100%;' : 'max-width: 500px;'"
             >
-                <TaskCard 
+                <TaskCard
                     :taskData="userTask"
                     :cardView="cardView"
                 />
-                
             </q-item>
         </q-list>
+
+        <div v-else class="q-mb-xl">Задач нет ?! Попробуйте изменить параметры фильтра или возьмите открытую задачу !</div>
 
         Открытые задачи:
 
@@ -94,7 +98,7 @@
             </li>
         </ul>
 
-        Все задачи:
+        Все задачи: <!-- Для тех, кто имеет доступ !-->
         <ul>
             <li
                 v-for="(task, i) of taskList"
@@ -113,12 +117,12 @@
     // добавить миксины сортировки, фильтрации и реверса!!
     import { filtration } from 'src/functions/filtration.js'
     import { FilterSort } from 'src/functions/FilterSort';
-    import ReverseBtn from 'src/components/COMMON/ReverseBtn'
+    //import ReverseBtn from 'src/components/COMMON/ReverseBtn'
 
     import { sortSelectMixin } from 'src/mixins/sortSelectMixin.js'
     import { filterSelectMixin } from 'src/mixins/filterSelectMixin.js'
     import { searchInputMixin } from 'src/mixins/searchInputMixin.js'
-    // import { reverseBtnMixin } from 'src/mixins/reverseBtnMixin.js'   
+    //import { reverseBtnMixin } from 'src/mixins/reverseBtnMixin.js'   
 
     export default {
         name: "TasksPage",
@@ -126,13 +130,14 @@
         mixins: [searchInputMixin, filterSelectMixin, sortSelectMixin],
 
         components: {
-            TaskCard,
-            ReverseBtn
+            TaskCard
         },
 
         data() {
             return {
-                cardView: false
+                cardView: false,
+                isReversed: false,
+                isReverseBtnClicked: false
             }
         },
 
@@ -153,18 +158,23 @@
 
                     sortOpt: {
                         data: this.sortOption === '' ? null : this.sortOption,
-                        objKey: this.sortOption === 'По срочности' ? 'urgentState' : this.sortOption === 'По сроку выполнения' ? 'expDate' : null
-                    } 
+                        objKey: this.sortOption === 'По срочности' ? 'urgentState' : 
+                                this.sortOption === 'По сроку выполнения' ? 'expDate' : 
+                                this.sortOption === 'Без сортировки' ? 'createdBy.createdDate' : null, // последняя строка не рабоет корректно
+
+                        sortMethod: this.sortOption === 'По срочности' ? 'fromBiggest' : this.sortOption === 'По сроку выполнения' ? 'fromSmaller' : null
+                    },
+
+                    isReversed: this.isReversed !== null ? this.isReversed : null
                 }).init()
             },
         },
 
         methods: {
             reverse() {
-                // console.log(this.activeUserTasks)
-                // this.activeUserTasks.reverse()
+                this.isReversed = !this.isReversed
             }
-        }
+        },
     }
 </script>
 
