@@ -33,7 +33,7 @@
 
             <div class="user-tasks__search q-mr-xl">
                 <!-- компонент поиска -->
-                <Search 
+                <SearchInput 
                     :arr="this.activeUserTasks"
                     @search="setSearchField"
                 />
@@ -41,27 +41,26 @@
             </div>
 
             <div class="user-tasks__filter q-mr-xl">
-                <q-select
-                    filled
-                    v-model="filterData"
-                    :options="filterOptions"
-                    label="Фильтр"
-                    style="width: 250px"
+                <!-- компонент фильтрации -->
+                <FilterSelect 
+                    :filterOptions="['Все', 'Открытая задача', 'В работе', 'Выполнена', 'Приостановлена', 'Закрыта']"
+                    @filterOption="setFilterOpt"
                 />
             </div>
 
             <div class="user-tasks__sort q-mr-xl">
-                <q-select
-                    filled
-                    v-model="sortData"
-                    :options="sortOptions"
-                    label="Сортировка"
-                    style="width: 250px"
+                <!-- компонент сортировки -->
+                <SortSelect
+                    :sortOptions="['Без сортировки', 'По срочности', 'По сроку выполнения']"
+                    @sortOption="setSortOpt"
                 />
             </div>
 
             <div class="user-tasks__reverse">
-                <q-btn @click="isReversed = !isReversed" icon="height"/>
+                <!-- компонент реверсивной кнопки -->
+                <ReverseBtn
+                    @reverse="reverse"
+                />
             </div>
         </div>
 
@@ -76,7 +75,6 @@
                 style="height: fit-content;"
                 :style="!cardView ? 'max-width: 100%;' : 'max-width: 500px;'"
             >
-            
                 <TaskCard 
                     :taskData="userTask"
                     :cardView="cardView"
@@ -113,65 +111,58 @@
     import { mapGetters, mapActions } from 'vuex'
     import TaskCard from 'src/components/TASK/TaskCard'
     // добавить миксины сортировки, фильтрации и реверса!!
-    import { search } from 'src/mixins/search.js'
-    // import { filter } from 'src/mixins/filter.js'
     import { filtration } from 'src/functions/filtration.js'
+    import { FilterSort } from 'src/functions/FilterSort';
+    import ReverseBtn from 'src/components/COMMON/ReverseBtn'
+
+    import { sortSelectMixin } from 'src/mixins/sortSelectMixin.js'
+    import { filterSelectMixin } from 'src/mixins/filterSelectMixin.js'
+    import { searchInputMixin } from 'src/mixins/searchInputMixin.js'
+    // import { reverseBtnMixin } from 'src/mixins/reverseBtnMixin.js'   
 
     export default {
         name: "TasksPage",
 
-        mixins: [search],
+        mixins: [searchInputMixin, filterSelectMixin, sortSelectMixin],
 
         components: {
-            TaskCard
+            TaskCard,
+            ReverseBtn
         },
 
         data() {
             return {
-                cardView: false,
-
-                // убрать фильтрацию в миксин и компонент !!
-                //filterOption: 'Все',
-                filterOptions: ['Все', 'Открытая задача', 'В работе', 'Выполнена', 'Приостановлена', 'Закрыта'],
-                filterData: '',
-
-                // убрать сортировку в миксин и компонент !! 
-                // добавить "По срочности: cначала срочные", "По срочности: сначала не срочные", "По сроку выполнения: близкие к сдаче", "По сроку выполнения: не близкие к сдаче"
-                // вместо этого добавить стрелочки вниз вверх и делать reverse массива
-                //sortOption: 'Без сортировки',
-                sortOptions: ['Без сортировки', 'По срочности', 'По сроку выполнения'],
-                sortData: '',
-
-                // убрать в отдельный компонент
-                isReversed: false
+                cardView: false
             }
         },
 
         computed: {
-            ...mapGetters('task', ['activeUserTasks', 'openedTasks','taskList']),
+            ...mapGetters('task', ['activeUserTasks', 'openedTasks', 'taskList']),
 
             filteredTasks() {
-                // filtration(searchOpt = null, filterOpt = null, sortOpt = null, isReversed = false, arr)
+                return new FilterSort(this.activeUserTasks, {
+                    searchOpt: {
+                        data: this.searchingText === '' ? null : this.searchingText,
+                        objKey: 'title'
+                    },
 
-                let searchOpt = {
-                    data: this.searchingText,
-                    identifier: 'title'
-                }
+                    filterOpt: {
+                        data: this.filterOption === '' || this.filterOption === 'Все' ? null : this.filterOption,
+                        objKey: 'statusDesc'
+                    },
 
-                let filterOpt = {
-                    data: this.filterData !== 'Все' ? this.filterData : '',
-                    identifier: 'statusDesc'
-                }
+                    sortOpt: {
+                        data: this.sortOption === '' ? null : this.sortOption,
+                        objKey: this.sortOption === 'По срочности' ? 'urgentState' : this.sortOption === 'По сроку выполнения' ? 'expDate' : null
+                    } 
+                }).init()
+            },
+        },
 
-                let sortOpt = {
-                    isReversed: this.isReversed,
-                    data: this.sortData !== 'Без сортировки' ? this.sortData : '',
-                    identifier: this.sortData === 'По срочности' ? 'urgentState' : this.sortData === 'По сроку выполнения' ? 'expDate' : null
-                }
-
-                let isReversed = this.isReversed
-
-                return filtration(searchOpt, filterOpt, sortOpt, isReversed, this.activeUserTasks )
+        methods: {
+            reverse() {
+                // console.log(this.activeUserTasks)
+                // this.activeUserTasks.reverse()
             }
         }
     }

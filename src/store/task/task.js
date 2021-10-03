@@ -41,11 +41,11 @@ let tasks = [
         //кем и когда создана
         createdBy: {
             id: 3,
-            createdDate: new Date()
+            createdDate: new Date('03.03.2018')
         },
         
         //дата сдачи
-        expDate: new Date(),
+        expDate: new Date('03.03.2019'),
 
         //кфф срочночти выполнения
         urgentState: 5,
@@ -100,11 +100,11 @@ let tasks = [
         //кем и когда создана
         createdBy: {
             id: 3,
-            createdDate: new Date()
+            createdDate: new Date('04.03.2018')
         },
         
         //дата сдачи
-        expDate: new Date(),
+        expDate: new Date('04.03.2019'),
 
         //кфф срочночти выполнения
         urgentState: 7,
@@ -159,11 +159,11 @@ let tasks = [
         //кем и когда создана
         createdBy: {
             id: 3,
-            createdDate: new Date()
+            createdDate: new Date('05.03.2018')
         },
         
         //дата сдачи
-        expDate: new Date(),
+        expDate: new Date('05.03.2019'),
 
         //кфф срочночти выполнения
         urgentState: 7,
@@ -218,11 +218,11 @@ let tasks = [
         //кем и когда создана
         createdBy: {
             id: 3,
-            createdDate: new Date()
+            createdDate: new Date('06.03.2018')
         },
         
         //дата сдачи
-        expDate: new Date(),
+        expDate: new Date('06.03.2019'),
 
         //кфф срочночти выполнения
         urgentState: 7,
@@ -277,11 +277,11 @@ let tasks = [
         //кем и когда создана
         createdBy: {
             id: 3,
-            createdDate: new Date()
+            createdDate: new Date('07.03.2018')
         },
         
         //дата сдачи
-        expDate: new Date(),
+        expDate: new Date('07.03.2019'),
 
         //кфф срочночти выполнения
         urgentState: 3,
@@ -340,11 +340,11 @@ let tasks = [
         //кем и когда создана
         createdBy: {
             id: 3,
-            createdDate: new Date()
+            createdDate: new Date('08.03.2018')
         },
         
         //дата сдачи
-        expDate: new Date(),
+        expDate: new Date('08.03.2019'),
 
         //кфф срочночти выполнения
         urgentState: 7,
