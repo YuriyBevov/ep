@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import auth from './auth/auth.js'
 import user from './user/user.js'
+import project from './project/project.js'
 import task from './task/task.js'
 
 Vue.use(Vuex)
@@ -20,7 +21,9 @@ const Store = new Vuex.Store({
   modules: {
     auth,
     user,
+    project,
     task,
+
   },
 
   // enable strict mode (adds overhead!)

@@ -15,7 +15,7 @@
                     {{this.$props.taskData.statusDesc}}
                 </span>
 
-                <span class="text-orange-4 q-mr-lg">КФФ: {{this.$props.taskData.urgentState}}</span>
+                <span class="text-orange-4 q-mr-lg">Приоритет: {{this.$props.taskData.priority}}</span>
 
                 <span class="text-caption">
                     {{this.setDate(this.$props.taskData.expDate).date}} / {{this.setDate(this.$props.taskData.expDate).time}}
@@ -38,7 +38,7 @@
             <div class="text-h5 q-mt-sm q-mb-xs flex justify-between items-center">
                 <span class="task-card__title">{{this.$props.taskData.title}}</span>
                 <div class="flex column items-end text-caption" >
-                    <span class="text-orange-4">КФФ: {{this.$props.taskData.urgentState}}</span>
+                    <span class="text-orange-4">Приоритет: {{this.$props.taskData.priority}}</span>
                     <span>{{this.setDate(this.$props.taskData.expDate).date}} / {{this.setDate(this.$props.taskData.expDate).time}}</span>
                 </div>
             </div>
@@ -70,7 +70,7 @@
         </q-card-actions>
 
         <q-slide-transition >
-            <div v-show="isCardExpanded">
+            <div v-show="isCardExpanded && this.$props.cardView">
                 <q-separator/>
                 <q-card-section class="text-subtitle2">
                     <!--Кем создано-->
@@ -106,19 +106,37 @@
                             </li>
                         </ul>
                     </div>
+                    <!-- Подзадачи -->
+
+                    <div class="text-overline text-grey">
+                        Подзадачи:
+                        <ul class="cmn__list" v-if="this.$props.taskData.subtasks">
+                            <li
+                                v-for="(subtask, i) of this.$props.taskData.subtasks"
+                                :key="'subtask_' + i"
+                            >
+                                {{subtask.title}}
+                            </li>
+                        </ul>
+                        <span v-else>Нет</span>
+                    </div>
                     <!-- Отв лицо задачи -->
                     <div class="text-overline text-grey">
 
-                        Ответственные лица:
-                        <ul class="cmn__list">
+                        Ответственное лицо:
+
+                        <p class="q-pl-xl">{{this.$props.taskData.master.fullName}}</p>
+                        <!-- <ul class="cmn__list">
                             <li
-                                v-for="(master, i) of this.$props.taskData.taskMasters"
+                                v-for="(master, i) of this.$props.taskData.master"
                                 :key="'master_' + i"
                             >
                                 {{master.fullName}}
                             </li>
-                        </ul>
+                        </ul> -->
                     </div>
+
+
                 </q-card-section>
             </div>
         </q-slide-transition>

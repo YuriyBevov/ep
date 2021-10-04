@@ -3,7 +3,7 @@
 const state = {
     userList: [
         {
-            id: 1,
+            id: '1',
             name: "Юрий",
             surname: "Бевов",
             fullName: "Юрий Бевов",
@@ -29,7 +29,7 @@ const state = {
         },
 
         {
-            id: 2,
+            id: '2',
             name: "Артем",
             surname: "Чернух",
             fullName: "Артем Чернух",
@@ -55,7 +55,7 @@ const state = {
         },
 
         {
-            id: 3,
+            id: '3',
             name: "Григорий",
             surname: "Дзнеладзе",
             fullName: "Григорий Дзнеладзе",
@@ -86,13 +86,13 @@ const state = {
     ],
 
     activeUser: {
-        id: 1,
+        id: '1',
         fullName: "Юрий Бевов",
         role: ['user'],
         //
         accesibleList: [
             {
-                id: 1
+                id: '1'
             }
         ]
     }

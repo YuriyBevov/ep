@@ -75,11 +75,8 @@
                     <q-item-section>
                         <q-item-label overline>Ответственные лица:</q-item-label>
                         <q-item-label>
-                            <span 
-                                v-for="(master, i) of this.currentTask.taskMasters"     
-                                :key="'master_' + i"
-                            >   
-                                {{master.fullName}} <span v-if="i < currentTask.taskMasters.length - 1">/</span>
+                            <span>
+                                {{ this.currentTask.master.fullName }}
                             </span>
                         </q-item-label>
                     </q-item-section>

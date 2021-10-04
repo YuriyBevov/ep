@@ -18,7 +18,16 @@
                        При переходе в открытую задачу, пользователь может назначить себя исполнителем. 
                 </span>
             </span>
-        </div> -->
+            </div> 
+            
+            Логика : 
+
+            если задача открытая, у нее нет отв лица. отв лицо может быть только одно. если отв лицо назначено, по умолчанию он становится исполнителем
+
+            только создатель задачи может сменить отв.лицо
+        -->
+
+            
 
         <!--Добавить поиск и сортировку задач, а также переключение вида с карточек на список-->
 
@@ -51,7 +60,7 @@
             <div class="user-tasks__sort q-mr-xl">
                 <!-- компонент сортировки -->
                 <SortSelect
-                    :sortOptions="['Без сортировки', 'По срочности', 'По сроку выполнения']"
+                    :sortOptions="['Без сортировки', 'По приоритету', 'По сроку выполнения']"
                     @sortOption="setSortOpt"
                 />
             </div>
@@ -158,11 +167,11 @@
 
                     sortOpt: {
                         data: this.sortOption === '' ? null : this.sortOption,
-                        objKey: this.sortOption === 'По срочности' ? 'urgentState' : 
+                        objKey: this.sortOption === 'По приоритету' ? 'priority' : 
                                 this.sortOption === 'По сроку выполнения' ? 'expDate' : 
-                                this.sortOption === 'Без сортировки' ? 'createdBy.createdDate' : null, // последняя строка не рабоет корректно
+                                this.sortOption === 'Без сортировки' ? 'createdBy.createdDate' : null,
 
-                        sortMethod: this.sortOption === 'По срочности' ? 'fromBiggest' : this.sortOption === 'По сроку выполнения' ? 'fromSmaller' : null
+                        sortMethod: this.sortOption === 'По приоритету' ? 'fromBiggest' : this.sortOption === 'По сроку выполнения' ? 'fromSmaller' : null
                     },
 
                     isReversed: this.isReversed !== null ? this.isReversed : null

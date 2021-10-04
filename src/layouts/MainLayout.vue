@@ -136,9 +136,11 @@
 
       methods: {
           ...mapActions('task', ['GET_TASK_LIST']),
+          ...mapActions('project', ['GET_PROJECT_LIST']),
 
-          getTaskList() {
+          initAppData() {
               this.GET_TASK_LIST()
+              this.GET_PROJECT_LIST()
           },
           
           logout() {
@@ -147,7 +149,7 @@
       },
 
       mounted() {
-          this.getTaskList()
+          this.initAppData()
       }
   }
 </script>

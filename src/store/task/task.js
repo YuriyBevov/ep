@@ -5,6 +5,8 @@ import user from "../user/user"
 let tasks = [
     {
         id: '1',
+
+        subtasks: [{id: '2'}, {id: '3'}],
         //название задачи
         title: 'Задача Задача Задача №1',
         //описание задачи
@@ -18,11 +20,11 @@ let tasks = [
         //участники. Те пользователи, которые видят данную задачу в списке СВОИХ задач
         members: [
             {
-                id: 1
-            },
+                id: '1'
+            }, 
 
             {
-                id: 2
+                id: '2'
             } 
         ],
 
@@ -40,7 +42,7 @@ let tasks = [
 
         //кем и когда создана
         createdBy: {
-            id: 3,
+            id: '3',
             createdDate: new Date('03.03.2018')
         },
         
@@ -48,17 +50,14 @@ let tasks = [
         expDate: new Date('3.13.2019'),
 
         //кфф срочночти выполнения
-        urgentState: 5,
+        priority: 5,
 
         //ответственное лицо
-        taskMasters: [
-            { id: 3 },
-            { id: 2 }
-        ],
+        master: { id: '2' },
         //исполнитель(ли)
         performers: [
             {
-                id: 1
+                id: '1'
             }
         ],
         //к какому отделу(отделам) относится задача
@@ -79,11 +78,11 @@ let tasks = [
         //участники. Те пользователи, которые видят данную задачу в списке СВОИХ задач
         members: [
             {
-                id: 1
+                id: '1'
             },
 
             {
-                id: 2
+                id: '2'
             } 
         ],
         //изображения
@@ -99,7 +98,7 @@ let tasks = [
         ],
         //кем и когда создана
         createdBy: {
-            id: 3,
+            id: '3',
             createdDate: new Date('04.03.2018')
         },
         
@@ -107,17 +106,14 @@ let tasks = [
         expDate: new Date('02.11.2019'),
 
         //кфф срочночти выполнения
-        urgentState: 7,
+        priority: 7,
 
         //ответственное лицо
-        taskMasters: [
-            { id: 3 },
-            { id: 2 }
-        ],
+        master: { id: '1' },
         //исполнитель(ли)
         performers: [
             {
-                id: 1
+                id: '1'
             }
         ],
         //к какому отделу(отделам) относится задача
@@ -138,11 +134,11 @@ let tasks = [
         //участники. Те пользователи, которые видят данную задачу в списке СВОИХ задач
         members: [
             {
-                id: 1
+                id: '1'
             },
 
             {
-                id: 2
+                id: '2'
             } 
         ],
         //изображения
@@ -158,7 +154,7 @@ let tasks = [
         ],
         //кем и когда создана
         createdBy: {
-            id: 3,
+            id: '3',
             createdDate: new Date('05.03.2018')
         },
         
@@ -166,18 +162,13 @@ let tasks = [
         expDate: new Date('05.03.2019'),
 
         //кфф срочночти выполнения
-        urgentState: 7,
+        priority: 7,
 
         //ответственное лицо
-        taskMasters: [
-            { id: 3 },
-            { id: 2 }
-        ],
+        master: '',
         //исполнитель(ли)
         performers: [
-            {
-                id: 1
-            }
+
         ],
         //к какому отделу(отделам) относится задача
         departments: ['manufacture']
@@ -197,11 +188,11 @@ let tasks = [
         //участники. Те пользователи, которые видят данную задачу в списке СВОИХ задач
         members: [
             {
-                id: 1
+                id: '1'
             },
 
             {
-                id: 2
+                id: '2'
             } 
         ],
         //изображения
@@ -217,7 +208,7 @@ let tasks = [
         ],
         //кем и когда создана
         createdBy: {
-            id: 3,
+            id: '3',
             createdDate: new Date('06.03.2018')
         },
         
@@ -225,17 +216,14 @@ let tasks = [
         expDate: new Date('06.03.2019'),
 
         //кфф срочночти выполнения
-        urgentState: 7,
+        priority: 7,
 
         //ответственное лицо
-        taskMasters: [
-            { id: 3 },
-            { id: 2 }
-        ],
+        master: { id: '3' },
         //исполнитель(ли)
         performers: [
             {
-                id: 1
+                id: '1'
             }
         ],
         //к какому отделу(отделам) относится задача
@@ -256,11 +244,11 @@ let tasks = [
         //участники. Те пользователи, которые видят данную задачу в списке СВОИХ задач
         members: [
             {
-                id: 1
+                id: '1'
             },
 
             {
-                id: 2
+                id: '2'
             } 
         ],
         //изображения
@@ -276,7 +264,7 @@ let tasks = [
         ],
         //кем и когда создана
         createdBy: {
-            id: 3,
+            id: '3',
             createdDate: new Date('07.03.2018')
         },
         
@@ -284,17 +272,14 @@ let tasks = [
         expDate: new Date('02.03.2019'),
 
         //кфф срочночти выполнения
-        urgentState: 3,
+        priority: 3,
 
         //ответственное лицо
-        taskMasters: [
-            { id: 3 },
-            { id: 2 }
-        ],
+        master: { id: '2' },
         //исполнитель(ли)
         performers: [
             {
-                id: 1
+                id: '1'
             }
         ],
         //к какому отделу(отделам) относится задача
@@ -315,15 +300,15 @@ let tasks = [
         //участники. Те пользователи, которые видят данную задачу в списке СВОИХ задач
         members: [
             {
-                id: 1
+                id: '1'
             },
 
             {
-                id: 2
+                id: '2'
             },
 
             {
-                id: 3
+                id: '3'
             }
         ],
         //изображения
@@ -339,7 +324,7 @@ let tasks = [
         ],
         //кем и когда создана
         createdBy: {
-            id: 3,
+            id: '3',
             createdDate: new Date('08.03.2018')
         },
         
@@ -347,17 +332,14 @@ let tasks = [
         expDate: new Date('08.03.2019'),
 
         //кфф срочночти выполнения
-        urgentState: 7,
+        priority: 7,
 
         //ответственное лицо
-        taskMasters: [
-            { id: 3 },
-            { id: 2 }
-        ],
+        master: { id: '3' },
         //исполнитель(ли)
         performers: [
             {
-                id: 1
+                id: '1'
             }
         ],
         //к какому отделу(отделам) относится задача
@@ -371,7 +353,7 @@ const state = {
 
 const mutations = {
     FILL_TASK_LIST(state, tasks ) {
-        state.initialTaskList = state.taskList = tasks
+        state.taskList = tasks
     }
 }
 
@@ -393,12 +375,28 @@ const getters = {
             })
         }
 
+        function fillSubtaskData(arr, taskList) {
+            arr.forEach(item => {
+                taskList.forEach(task => {
+                    task.id === item.id ?
+                    item.title = task.title : null
+                })
+            })
+        }
+
         const users = rootGetters.user.userList
 
         state.taskList.forEach(task => {
             fillUserData(task.members, users)
             fillUserData(task.performers, users)
-            fillUserData(task.taskMasters, users)
+
+            task.subtasks ?
+            fillSubtaskData(task.subtasks, state.taskList) : null
+
+            users.find(user => {
+                user.id === task.master.id ?
+                task.master.fullName = user.fullName : null
+            })
 
             let user = users.find(user => {
                return user.id === task.createdBy.id
