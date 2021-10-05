@@ -66,6 +66,9 @@
                 <q-badge outline color="secondary" label="Уч-к" />
             </q-checkbox>
         </div>
+
+        <!-- emit в родителя данных о выбранных пользователях --> 
+        <q-btn>Подтвердить</q-btn>
     </div>
 </template>
 

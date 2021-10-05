@@ -35,14 +35,6 @@
                 label="Описание:"
             />
 
-            <!--<q-select
-                filled 
-                v-model="members"
-                multiple
-                :options="getUsersName()" 
-                label="Выбрать участников:"
-            />-->
-
             <q-btn @click="isMemberSelectionOpened = !isMemberSelectionOpened">Выбор состава задачи</q-btn>
 
             <q-dialog v-model="isMemberSelectionOpened" transition-show="fade" transition-hide="fade" full-width>
@@ -53,7 +45,6 @@
                         @chooseResult="createTaskMembersList"
                     />
                 </q-card>
-    
             </q-dialog>
 
             <q-select 
