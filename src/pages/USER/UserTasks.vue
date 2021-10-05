@@ -123,15 +123,18 @@
 <script>
     import { mapGetters, mapActions } from 'vuex'
     import TaskCard from 'src/components/TASK/TaskCard'
-    // добавить миксины сортировки, фильтрации и реверса!!
-    import { filtration } from 'src/functions/filtration.js'
-    import { FilterSort } from 'src/functions/FilterSort';
+
+    //import { FilterSort } from 'src/functions/FilterSort';
     //import ReverseBtn from 'src/components/COMMON/ReverseBtn'
 
     import { sortSelectMixin } from 'src/mixins/sortSelectMixin.js'
     import { filterSelectMixin } from 'src/mixins/filterSelectMixin.js'
     import { searchInputMixin } from 'src/mixins/searchInputMixin.js'
-    //import { reverseBtnMixin } from 'src/mixins/reverseBtnMixin.js'   
+    //import { reverseBtnMixin } from 'src/mixins/reverseBtnMixin.js'
+
+    import { searching } from 'src/functions/searching.js'
+    import { filtration } from 'src/functions/filtration.js'
+    import { sorting } from 'src/functions/sorting.js'
 
     export default {
         name: "TasksPage",
@@ -145,8 +148,8 @@
         data() {
             return {
                 cardView: false,
-                isReversed: false,
-                isReverseBtnClicked: false
+                // isReversed: false,
+                // isReverseBtnClicked: false
             }
         },
 
@@ -154,34 +157,35 @@
             ...mapGetters('task', ['activeUserTasks', 'openedTasks', 'taskList']),
 
             filteredTasks() {
-                return new FilterSort(this.activeUserTasks, {
-                    searchOpt: {
-                        data: this.searchingText === '' ? null : this.searchingText,
-                        objKey: 'title'
-                    },
+                let filteredData = this.activeUserTasks
 
-                    filterOpt: {
-                        data: this.filterOption === '' || this.filterOption === 'Все' ? null : this.filterOption,
-                        objKey: 'statusDesc'
-                    },
+                if(this.searchingText) {
+                    filteredData = searching(filteredData, this.searchingText, 'title')
+                }
 
-                    sortOpt: {
-                        data: this.sortOption === '' ? null : this.sortOption,
-                        objKey: this.sortOption === 'По приоритету' ? 'priority' : 
-                                this.sortOption === 'По сроку выполнения' ? 'expDate' : 
-                                this.sortOption === 'Без сортировки' ? 'createdBy.createdDate' : null,
+                if(this.filterOption && this.filterOption !== 'Все') {
+                    let objKey = 'statusDesc'
+                    filteredData = filtration(filteredData, this.filterOption, 'statusDesc')
+                }
 
-                        sortMethod: this.sortOption === 'По приоритету' ? 'fromBiggest' : this.sortOption === 'По сроку выполнения' ? 'fromSmaller' : null
-                    },
+                if(this.sortOption && this.sortOption !== 'Без сортировки') {
+                    let objKey = this.sortOption === 'По приоритету' ? 'priority' : 
+                                 this.sortOption === 'По сроку выполнения' ? 'expDate' : null
 
-                    isReversed: this.isReversed !== null ? this.isReversed : null
-                }).init()
+                    let sortMethod = this.sortOption === 'По приоритету' ? 'fromBiggest' :
+                                     this.sortOption === 'По сроку выполнения' ? 'fromSmaller' : null
+
+                    filteredData = sorting(filteredData, sortMethod, objKey)
+                }
+
+                return filteredData
             },
         },
 
         methods: {
             reverse() {
-                this.isReversed = !this.isReversed
+                //this.isReverseBtnClicked = true
+                console.log('reverse')
             }
         },
     }

@@ -137,10 +137,13 @@
       methods: {
           ...mapActions('task', ['GET_TASK_LIST']),
           ...mapActions('project', ['GET_PROJECT_LIST']),
+          ...mapActions('department', ['GET_DEPARTMENTS_LIST']),
+
 
           initAppData() {
-              this.GET_TASK_LIST()
+              this.GET_DEPARTMENTS_LIST()
               this.GET_PROJECT_LIST()
+              this.GET_TASK_LIST()
           },
           
           logout() {

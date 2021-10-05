@@ -5,12 +5,12 @@
         1) название задачи+ (валидация на уникальность, на заполненность+)
         2) описание задачи+
         3) материалы(фото) + подпись к ним (пока -)
-        4) отв лицо (если его нет => задача открытая)
-        5) исполнители(пока просто протыкать, в дальнейшем по отделам)
+        4) отв лицо (если его нет => задача открытая)+
+        5) исполнители(пока просто протыкать, в дальнейшем по отделам)+
         6) в какой отдел направлен(в дальнейшем => при выборе отдела выбераются все участники, как исполнители)
         7) приоритет+
         8) добавить задачу в проект+
-        9) участники задачи
+        9) участники задачи+
         10) срок и дата выполнения+
         
     -->
@@ -35,28 +35,26 @@
                 label="Описание:"
             />
 
-            <q-select
+            <!--<q-select
                 filled 
                 v-model="members"
                 multiple
                 :options="getUsersName()" 
                 label="Выбрать участников:"
-            />
+            />-->
 
-            <q-select
-                filled 
-                v-model="performers"
-                multiple
-                :options="getUsersName()" 
-                label="Выбрать исполнителей:"
-            />
+            <q-btn @click="isMemberSelectionOpened = !isMemberSelectionOpened">Выбор состава задачи</q-btn>
 
-            <q-select
-                filled 
-                v-model="master" 
-                :options="getUsersName()" 
-                label="Выбрать отв. лицо:"
-            />
+            <q-dialog v-model="isMemberSelectionOpened" transition-show="fade" transition-hide="fade" full-width>
+                <q-card style="height: 50vh; " class="flex column no-wrap q-pa-lg" >
+                    <UserSelectionModal
+                        :users="this.userList"
+                        :departments="this.departmentList"
+                        @chooseResult="createTaskMembersList"
+                    />
+                </q-card>
+    
+            </q-dialog>
 
             <q-select 
                 filled 
@@ -78,11 +76,12 @@
                 ]"
             />
 
-            <q-input filled v-model="date" label="Срок сдачи:">
+            <!--убрать в компонент выбора даты и времени-->
+            <q-input filled v-model="expDate" label="Срок сдачи:">
                 <template v-slot:prepend>
                     <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy transition-show="scale" transition-hide="scale">
-                        <q-date v-model="date" mask="YYYY-MM-DD HH:mm">
+                        <q-date v-model="expDate" mask="YYYY-MM-DD HH:mm">
                         <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Close" color="primary" flat />
                         </div>
@@ -94,7 +93,7 @@
                 <template v-slot:append>
                     <q-icon name="access_time" class="cursor-pointer">
                     <q-popup-proxy transition-show="scale" transition-hide="scale">
-                        <q-time v-model="date" mask="YYYY-MM-DD HH:mm" format24h>
+                        <q-time v-model="expDate" mask="YYYY-MM-DD HH:mm" format24h>
                         <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Close" color="primary" flat />
                         </div>
@@ -117,8 +116,13 @@
 
 <script>
     import { mapGetters, mapAtions } from 'vuex'
-    
+    import { FilterSort } from 'src/functions/FilterSort'
+    import UserSelectionModal from 'src/components/COMMON/UserSelectionModal'
+
     export default {
+        components: {
+            UserSelectionModal
+        },
 
         data () {
             return {
@@ -130,14 +134,18 @@
                 projectMember: 'Нет',
                 projectOptions: ['Нет', 'Ам', 'Аптеки'],
                 priority: 0,
-                date: 'Не выбрано',
-                dating: new Date('2021-10-15 22:30'),
+                expDate: 'Не выбрано',
 
-                submit: false
+                submit: false,
+                isMemberSelectionOpened: false,
             }
         },
 
         methods: {
+            createTaskMembersList(data) {
+                console.log(data)
+            },
+
             getProjectsName() {
                 let projects = []
 
@@ -148,7 +156,7 @@
                 return projects
             },
 
-            getUsersName() {
+            /*getUsersName() {
                 let users = []
 
                 this.userList.forEach(user => {
@@ -156,7 +164,7 @@
                 })
 
                 return users
-            },
+            },*/
 
             onSubmit() {
                 if (this.submit !== true) {
@@ -182,10 +190,7 @@
         computed: {
             ...mapGetters('user', ['userList', 'activeUser']),
             ...mapGetters('project', ['projectList']),
-
-            /*setCreator() {
-                this.master = this.activeUser.fullName
-            }*/
+            ...mapGetters('department', ['departmentList']),
         }
     }
 </script>

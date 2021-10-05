@@ -20,7 +20,7 @@
                 Список подзадач -> переход в 
 
         -->
-        <div class="task-info__part q-pa-sm">
+        <div class="task-info__part q-pa-sm"  v-if="this.currentTask">
             <q-list bordered separator>
                 <q-item clickable v-ripple >
                     <q-item-section>
@@ -61,12 +61,7 @@
                     <q-item-section>
                         <q-item-label overline>Отделы:</q-item-label>
                         <q-item-label>
-                            <span 
-                                v-for="(dep, i) of this.currentTask.departmentsDesc"     
-                                :key="'dep_' + i"
-                            >   
-                                {{dep}} <span v-if="i < currentTask.departmentsDesc.length - 1">/</span>
-                            </span>
+                            <span>{{this.currentTask.department.title}}</span>
                         </q-item-label>
                     </q-item-section>
                 </q-item>
@@ -76,7 +71,7 @@
                         <q-item-label overline>Ответственные лица:</q-item-label>
                         <q-item-label>
                             <span>
-                                {{ this.currentTask.master.fullName }}
+                                <!--{{ this.currentTask.master.fullName }} вызывает ошибку-->
                             </span>
                         </q-item-label>
                     </q-item-section>
@@ -169,8 +164,6 @@
                     />
                 </div>
             </div>
-
-
         </div>
     </div>
 </template>
@@ -187,19 +180,7 @@
                 isEditable: false,
                 slide: 1,
                 fullscreen: false,
-                /*id,+
-                title,+
-                description,+
-                projectMember,+
-                status,+
 
-                members,+
-                imgList,+-
-                createdBy,
-                expDate
-                taskMasters+
-                performers,+
-                taskDepartment,*/
                 currentTask: {}
             }
         },
@@ -225,6 +206,7 @@
 
             setTaskInfo() {
                 this.currentTask = this.taskList.find(task => task.id === this.$route.params.id)
+                console.log(this.currentTask)
             },
 
             setDate(date) {

@@ -10,21 +10,29 @@ const state = {
             role: "user",
 
             // отдел пользователя
-            department: "manufacture",
+            department: { id: '1' },
 
             // задачи в которых сотоит
-            tasks: [
-                '1','2','3'
+            taskMember: [
+                { id: '1' },
+                { id: '2' },
+                { id: '3' },
+                { id: '4' },
+                { id: '5' }   
             ],
 
             // задачи в которых является мастером
             taskMaster: [
-                '2'
+                { id: '3' },
+                { id: '4' }
             ],
 
             // задачи в которых является исполнителем
             taskPerformer: [
-                '1'
+                { id: '1' },
+                { id: '2' },
+                { id: '3' },
+                { id: '4' }
             ]
         },
 
@@ -36,21 +44,26 @@ const state = {
             role: "user",
 
             // отдел пользователя
-            department: "manufacture",
+            department: { id: '3' },
 
             // задачи в которых сотоит
-            tasks: [
-                '1','2','3'
+            taskMember: [
+                { id: '2' },
+                { id: '4' },
+                { id: '5' },
+                { id: '6' }
             ],
 
             // задачи в которых является мастером
             taskMaster: [
-                '2'
+                { id: '2' },
+                { id: '5' }
             ],
 
             // задачи в которых является исполнителем
             taskPerformer: [
-                '1'
+                { id: '2' },
+                { id: '4' }
             ]
         },
 
@@ -62,23 +75,26 @@ const state = {
             role: "user, master",
 
             // отдел пользователя
-            department: "manufacture",
+            department: { id: '1' },
 
             /*!! не будет в бд !!*/
 
             // задачи в которых сотоит
-            tasks: [
-                '1','2','3'
+            taskMember: [
+                { id: '1' },
+                { id: '3'},
+                { id: '6' }                    
             ],
 
             // задачи в которых является мастером
             taskMaster: [
-                '2'
+                { id: '2' }
             ],
 
             // задачи в которых является исполнителем
             taskPerformer: [
-                '1'
+                { id: '2'},
+                { id: '1'},
             ]
 
             /*!! --- !!*/
@@ -107,7 +123,33 @@ const actions = {
 }
 
 const getters = {
-    userList: state => state.userList,
+    userList: (state, {}, rootGetters)  => {
+        function fillData(resArr, entList, objKey) {
+            resArr.forEach(resArrItem => {
+                entList.forEach(entListItem => {
+                    resArrItem.id === entListItem.id ?
+                    resArrItem[objKey] = entListItem[objKey] : null
+                })
+            })
+        }
+
+        const tasks = rootGetters.task.taskList
+        const departments = rootGetters.department.departmentList
+
+        state.userList.forEach(user => {
+            fillData(user.taskMember, tasks, 'title')
+            fillData(user.taskMaster, tasks, 'title')
+            fillData(user.taskPerformer, tasks, 'title')
+
+            departments.forEach(dep => {
+                dep.id === user.department.id ?
+                user.department.title = dep.title: null
+            })
+        })
+        
+
+        return state.userList
+    },
 
     activeUser: state => state.activeUser,
 

@@ -15,6 +15,7 @@ export const searchInputMixin = {
 
     methods: {
         setSearchField(str) {
+            console.log(!!str)
             this.searchingText = str
         }
     }

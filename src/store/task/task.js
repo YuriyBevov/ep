@@ -61,7 +61,7 @@ let tasks = [
             }
         ],
         //к какому отделу(отделам) относится задача
-        departments: ['manufacture', 'office', 'manager']
+        department: { id: '3' }
     },
 
     {
@@ -117,7 +117,7 @@ let tasks = [
             }
         ],
         //к какому отделу(отделам) относится задача
-        departments: ['manufacture']
+        department: { id: '2' }
     },
 
     {
@@ -171,7 +171,7 @@ let tasks = [
 
         ],
         //к какому отделу(отделам) относится задача
-        departments: ['manufacture']
+        department: { id: '3' }
     },
 
     {
@@ -227,7 +227,7 @@ let tasks = [
             }
         ],
         //к какому отделу(отделам) относится задача
-        departments: ['manufacture']
+        department: { id: '1' }
     },
 
     {
@@ -283,7 +283,7 @@ let tasks = [
             }
         ],
         //к какому отделу(отделам) относится задача
-        departments: ['manufacture']
+        department: { id: '2' }
     },
 
     {
@@ -343,7 +343,7 @@ let tasks = [
             }
         ],
         //к какому отделу(отделам) относится задача
-        departments: ['manufacture']
+        department: { id: '1' }
     }
 ]
 
@@ -385,10 +385,14 @@ const getters = {
         }
 
         const users = rootGetters.user.userList
+        const departments = rootGetters.department.departmentList
+
+
 
         state.taskList.forEach(task => {
             fillUserData(task.members, users)
             fillUserData(task.performers, users)
+
 
             task.subtasks ?
             fillSubtaskData(task.subtasks, state.taskList) : null
@@ -410,20 +414,10 @@ const getters = {
                                 task.status === 'isDone'   ? 'Выполнена'       :
                                 task.status === 'isClosed' ? 'Закрыта'         : null
 
-            // Возможно убрать на сервер ?                           
-            let departments = []
-            
-            if(task.departments.includes('manufacture')) {
-                departments.push('Производство')
-            }
-            if(task.departments.includes('office')) {
-                departments.push('Офис') 
-            }
-            if(task.departments.includes('manager')) {
-                departments.push('Менеджер')
-            }
-
-            task.departmentsDesc = departments
+            departments.forEach(dep => {
+                dep.id === task.department.id ?
+                task.department.title = dep.title : null
+            })
         })
 
         return state.taskList
