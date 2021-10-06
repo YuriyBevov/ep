@@ -8,7 +8,7 @@ const projects = [
 
         description: 'Делаем большой магазин под ключ',
 
-        projectGroup: 'AМ',
+        projectGroup: {id : '1', name: 'АМ'},
 
         tasks: [
             {
@@ -48,7 +48,7 @@ const projects = [
 
         description: 'Вешаем вывеску и делаем интерьер',
 
-        projectGroup: 'ЛекОптТорг',
+        projectGroup: {id : '2', name: 'ЛекОптТорг'},
 
         tasks: [
             {

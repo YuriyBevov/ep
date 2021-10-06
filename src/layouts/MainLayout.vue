@@ -39,7 +39,7 @@
 
           <!-- ИНТЕРФЕЙС ПОЛЬЗОВАТЕЛЯ -->
           
-          <div v-if="userRole.find(role => role === 'user')">
+          <div v-if="roles && roles.find(role => role === 'user')">
             <!--ЗАДАЧИ-->
 
             <q-item clickable v-ripple :to="'/'">
@@ -93,18 +93,37 @@
               </q-item-section>
             </q-item>
 
+            <q-separator />
+
+          </div>
+
+          <div v-if="roles && roles.find(role => role === 'superadmin')">
             <q-item clickable v-ripple :to="'/create_task'">
               <q-item-section avatar>
-                <q-icon name="build" color="primary"/>
+                <q-icon name="build" color="accent"/>
               </q-item-section>
 
               <q-item-section>
                 Создать новую задачу
               </q-item-section>
             </q-item>
-
             <q-separator />
+          </div>
 
+
+          <!-- ИНТЕРФЕЙС СУПЕРАДМИНА -->
+
+          <div v-if="roles && roles.find(role => role === 'superadmin')">
+            <q-item clickable v-ripple :to="'/create_user'">
+              <q-item-section avatar>
+                <q-icon name="person" color="negative"/>
+              </q-item-section>
+
+              <q-item-section>
+                Добавить пользователя
+              </q-item-section>
+
+            </q-item>
           </div>
 
         </q-list>
@@ -131,23 +150,25 @@
       },
 
       computed: {
-          ...mapGetters('user', ['activeUser', 'userRole'])
+          ...mapGetters('user', ['activeUser', 'roles'])
       },
 
       methods: {
+          ...mapActions('user', ['LOGOUT']),
           ...mapActions('task', ['GET_TASK_LIST']),
-          ...mapActions('project', ['GET_PROJECT_LIST']),
-          ...mapActions('department', ['GET_DEPARTMENTS_LIST']),
+          //...mapActions('project', ['GET_PROJECT_LIST']),
+          //...mapActions('department', ['GET_DEPARTMENTS_LIST']),
 
 
           initAppData() {
-              this.GET_DEPARTMENTS_LIST()
-              this.GET_PROJECT_LIST()
+              //this.GET_DEPARTMENTS_LIST()
+              //this.GET_PROJECT_LIST()
               this.GET_TASK_LIST()
           },
           
           logout() {
               console.log('logout')
+              this.LOGOUT()
           }
       },
 

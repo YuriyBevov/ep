@@ -1,6 +1,6 @@
-// import { axiosInstance } from 'src/boot/axios'
+import { axiosInstance } from 'src/boot/axios'
 
-import user from "../user/user"
+//import user from "../user/user"
 
 let tasks = [
     {
@@ -12,7 +12,7 @@ let tasks = [
         //описание задачи
         description: 'Описание задачи №1',
         //к какому проекту относится
-        projectMember: 'АМ',
+        projectMember: {id: '1'},
         //статус задачи
         // isOpened,inWork,isFrozen,isDone,isClosed
         status: "isDone",
@@ -41,9 +41,9 @@ let tasks = [
         ],
 
         //кем и когда создана
-        createdBy: {
-            id: '3',
-            createdDate: new Date('03.03.2018')
+        created: {
+            by: {id: '3'},
+            date: new Date('03.03.2018')
         },
         
         //дата сдачи
@@ -71,7 +71,7 @@ let tasks = [
         //описание задачи
         description: 'Описание задачи №1',
         //к какому проекту относится
-        projectMember: 'АМ',
+        projectMember: {id: '1'},
         //статус задачи
         // isOpened,inWork,isFrozen,isDone,isClosed
         status: "inWork",
@@ -97,9 +97,14 @@ let tasks = [
             },
         ],
         //кем и когда создана
-        createdBy: {
+        /* createdBy: {
             id: '3',
             createdDate: new Date('04.03.2018')
+        },*/
+
+        created: {
+            by: {id: '3'},
+            date: new Date('03.03.2018')
         },
         
         //дата сдачи
@@ -127,7 +132,7 @@ let tasks = [
         //описание задачи
         description: 'Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи №1',
         //к какому проекту относится
-        projectMember: 'АМ',
+        projectMember: {id: '2'},
         //статус задачи
         // isOpened,inWork,isFrozen,isDone,isClosed
         status: "isOpened",
@@ -153,9 +158,9 @@ let tasks = [
             },
         ],
         //кем и когда создана
-        createdBy: {
-            id: '3',
-            createdDate: new Date('05.03.2018')
+        created: {
+            by: {id: '2'},
+            date: new Date('03.03.2018')
         },
         
         //дата сдачи
@@ -181,7 +186,7 @@ let tasks = [
         //описание задачи
         description: 'Описание задачи №1',
         //к какому проекту относится
-        projectMember: 'АМ',
+        projectMember: {id: '1'},
         //статус задачи
         // isOpened,inWork,isFrozen,isDone,isClosed
         status: "isFrozen",
@@ -207,9 +212,9 @@ let tasks = [
             },
         ],
         //кем и когда создана
-        createdBy: {
-            id: '3',
-            createdDate: new Date('06.03.2018')
+        created: {
+            by: {id: '1'},
+            date: new Date('01.03.2018')
         },
         
         //дата сдачи
@@ -237,7 +242,7 @@ let tasks = [
         //описание задачи
         description: 'Описание задачи №1',
         //к какому проекту относится
-        projectMember: 'АМ',
+        projectMember: {id: '2'},
         //статус задачи
         // isOpened,inWork,isFrozen,isDone,isClosed
         status: "isDone",
@@ -263,9 +268,9 @@ let tasks = [
             },
         ],
         //кем и когда создана
-        createdBy: {
-            id: '3',
-            createdDate: new Date('07.03.2018')
+        created: {
+            by: {id: '3'},
+            date: new Date('04.03.2018')
         },
         
         //дата сдачи
@@ -293,7 +298,7 @@ let tasks = [
         //описание задачи
         description: 'Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи Описание задачи №1',
         //к какому проекту относится
-        projectMember: 'АМ',
+        projectMember: {id: '1'},
         //статус задачи
         // isOpened,inWork,isFrozen,isDone,isClosed
         status: "isClosed",
@@ -323,9 +328,9 @@ let tasks = [
             },
         ],
         //кем и когда создана
-        createdBy: {
-            id: '3',
-            createdDate: new Date('08.03.2018')
+        created: {
+            by: {id: '2'},
+            date: new Date('12.06.2018')
         },
         
         //дата сдачи
@@ -359,14 +364,27 @@ const mutations = {
 
 const actions = {
     GET_TASK_LIST({commit}) {
-        // получаю список задач с сервера
-        commit('FILL_TASK_LIST', tasks)
+        axiosInstance.get('task/get_tasks')
+        .then((tasks) => {
+            console.log(tasks.data)
+            commit('FILL_TASK_LIST', tasks.data)
+        })
+        .catch(err => console.log(err))
+    },
+
+    CREATE_TASK({commit}, task) {
+
+        axiosInstance.post('task/add_task', task)
+        .then((resp) => {
+            console.log(resp.data)
+        })
+        .catch(err => console.log(err))
     }
 }
 
 const getters = {
     taskList: (state, {}, rootGetters)  => {
-        function fillUserData(arr, userList) {
+        /*function fillUserData(arr, userList) {
             arr.forEach(item => {
                 userList.forEach(user => {
                     item.id === user.id ?
@@ -386,29 +404,27 @@ const getters = {
 
         const users = rootGetters.user.userList
         const departments = rootGetters.department.departmentList
-
+        const projects = rootGetters.project.projectList
 
 
         state.taskList.forEach(task => {
             fillUserData(task.members, users)
             fillUserData(task.performers, users)
 
-
             task.subtasks ?
             fillSubtaskData(task.subtasks, state.taskList) : null
 
-            users.find(user => {
+            /*users.find(user => {
                 user.id === task.master.id ?
                 task.master.fullName = user.fullName : null
             })
 
-            let user = users.find(user => {
-               return user.id === task.createdBy.id
-            })
+            users.find(user => {
+                user.id === task.created.by.id ?
+                task.created.by.fullName = user.fullName : null
+            }) */
 
-            // Возможно убрать на сервер ?
-            task.createdBy.fullName = user.fullName
-            task.statusDesc =   task.status === 'isOpened' ? 'Открытая задача' :
+            /*task.statusDesc =   task.status === 'isOpened' ? 'Открытая задача' :
                                 task.status === 'inWork'   ? 'В работе'        :
                                 task.status === 'isFrozen' ? 'Приостановлена'  :
                                 task.status === 'isDone'   ? 'Выполнена'       :
@@ -418,7 +434,12 @@ const getters = {
                 dep.id === task.department.id ?
                 task.department.title = dep.title : null
             })
-        })
+
+            projects.forEach(proj => {
+                proj.id === task.projectMember.id ?
+                task.projectMember.name = proj.projectGroup.name : null
+            })
+        })*/
 
         return state.taskList
     },
@@ -427,7 +448,8 @@ const getters = {
         let user = rootGetters.user.activeUser
 
         return state.taskList.filter(task => {
-            return task.members.find(member => member.id === user.id)
+            return task.members ?
+                   task.members.find(member => member.id === user.id) : null
         })
     },
     

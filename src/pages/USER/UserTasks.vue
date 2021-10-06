@@ -1,7 +1,7 @@
 <template>
     <div class="user-tasks" style="max-width: 1100px;">
 
-        <span class="user-tasks__title">Мои задачи:</span> 
+        <span class="user-tasks__title">Мои задачи:</span>  
 
         <!-- <div class="">
             <span>Компонент текущих задач пользователя: </br></span>

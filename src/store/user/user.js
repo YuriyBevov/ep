@@ -1,130 +1,90 @@
-// import { axiosInstance } from 'src/boot/axios'
+import { axiosInstance } from 'src/boot/axios'
 
 const state = {
-    userList: [
-        {
-            id: '1',
-            name: "Юрий",
-            surname: "Бевов",
-            fullName: "Юрий Бевов",
-            role: "user",
+    userList: [],
 
-            // отдел пользователя
-            department: { id: '1' },
-
-            // задачи в которых сотоит
-            taskMember: [
-                { id: '1' },
-                { id: '2' },
-                { id: '3' },
-                { id: '4' },
-                { id: '5' }   
-            ],
-
-            // задачи в которых является мастером
-            taskMaster: [
-                { id: '3' },
-                { id: '4' }
-            ],
-
-            // задачи в которых является исполнителем
-            taskPerformer: [
-                { id: '1' },
-                { id: '2' },
-                { id: '3' },
-                { id: '4' }
-            ]
-        },
-
-        {
-            id: '2',
-            name: "Артем",
-            surname: "Чернух",
-            fullName: "Артем Чернух",
-            role: "user",
-
-            // отдел пользователя
-            department: { id: '3' },
-
-            // задачи в которых сотоит
-            taskMember: [
-                { id: '2' },
-                { id: '4' },
-                { id: '5' },
-                { id: '6' }
-            ],
-
-            // задачи в которых является мастером
-            taskMaster: [
-                { id: '2' },
-                { id: '5' }
-            ],
-
-            // задачи в которых является исполнителем
-            taskPerformer: [
-                { id: '2' },
-                { id: '4' }
-            ]
-        },
-
-        {
-            id: '3',
-            name: "Григорий",
-            surname: "Дзнеладзе",
-            fullName: "Григорий Дзнеладзе",
-            role: "user, master",
-
-            // отдел пользователя
-            department: { id: '1' },
-
-            /*!! не будет в бд !!*/
-
-            // задачи в которых сотоит
-            taskMember: [
-                { id: '1' },
-                { id: '3'},
-                { id: '6' }                    
-            ],
-
-            // задачи в которых является мастером
-            taskMaster: [
-                { id: '2' }
-            ],
-
-            // задачи в которых является исполнителем
-            taskPerformer: [
-                { id: '2'},
-                { id: '1'},
-            ]
-
-            /*!! --- !!*/
-        }
-    ],
-
-    activeUser: {
-        id: '1',
-        fullName: "Юрий Бевов",
-        role: ['user'],
-        //
-        accesibleList: [
-            {
-                id: '1'
-            }
-        ]
-    }
+    activeUser: {}
 }
 
 const mutations = {
+    SET_ACTIVE_USER(state, user) {
+        state.activeUser = user
+    },
 
+    SET_USER_LIST(state, users) {
+        state.userList = users
+    }
 }
 
 const actions = {
+    LOGIN({commit, dispatch}, user) {
+        axiosInstance.post('user/login', user)
+        .then((resp) => {
+            localStorage.setItem('token', resp.data.token)
+            dispatch('GET_USER_LIST')
+            commit('SET_ACTIVE_USER', resp.data.user)
+        })
+        .then((resp) => {
+            this.$router.push('/')
+        })
+        .catch(err => console.log(err))
+    },
 
+    LOGOUT({commit}) {
+        delete axiosInstance.defaults.headers.common['Authorization']
+        
+        localStorage.removeItem('token')
+        commit('SET_ACTIVE_USER', {})
+        this.$router.push('/login')
+    },
+
+    AUTHENTICATION({ commit, dispatch }) {
+
+        axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('token')
+
+        axiosInstance.get('/auth/auth')
+        .then((resp) => {
+            console.log('auth ok')
+            // dispatch('GET_USER_LIST')
+            commit('SET_ACTIVE_USER', resp.data.user)
+            dispatch('REFRESH_TOKEN', resp.data.token)
+        })
+        .catch((err) => {
+            console.log('auth not')
+            localStorage.removeItem('token')
+            this.$router.push('/login')
+        })
+    },
+
+    REFRESH_TOKEN({dispatch}, payload) {
+        localStorage.setItem('token', payload)
+        // каждые 4 часа обновляю токен
+        setTimeout(() => {
+            dispatch('USER_AUTHENTICATION')
+        }, 4*60*60*1000)
+    },
+
+    CREATE_USER({commit}, user) {
+        axiosInstance.post('user/add_user', user)
+        .then((resp) => {
+            // console.log(resp.data)
+        })
+        .catch(err => console.log(err))
+    },
+
+    GET_USER_LIST({commit}) {
+        console.log('GET_USER_LIST')
+        axiosInstance.get('user/get_users')
+        .then((users) => {
+            commit('SET_USER_LIST', users.data)
+        })
+        .catch(err => console.log(err))
+    }
 }
 
 const getters = {
     userList: (state, {}, rootGetters)  => {
-        function fillData(resArr, entList, objKey) {
+        /*function fillData(resArr, entList, objKey) {
             resArr.forEach(resArrItem => {
                 entList.forEach(entListItem => {
                     resArrItem.id === entListItem.id ?
@@ -145,16 +105,21 @@ const getters = {
                 dep.id === user.department.id ?
                 user.department.title = dep.title: null
             })
-        })
-        
+        })*/
 
         return state.userList
     },
 
     activeUser: state => state.activeUser,
 
-    userRole: state => {
-        return state.activeUser.role
+    currentOrdinalNumber: (state) => {
+        return state.userList.length ?
+               state.userList[state.userList.length - 1].ordinalNumber + 1 : null
+    },
+
+    roles: state => {
+        return state.activeUser ?
+               state.activeUser.roles : null
     }
 }
 

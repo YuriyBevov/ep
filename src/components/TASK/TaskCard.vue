@@ -18,7 +18,7 @@
                 <span class="text-orange-4 q-mr-lg">Приоритет: {{this.$props.taskData.priority}}</span>
 
                 <span class="text-caption">
-                    {{this.setDate(this.$props.taskData.expDate).date}} / {{this.setDate(this.$props.taskData.expDate).time}}
+                    <!--{{this.setDate(this.$props.taskData.expDate).date}} / {{this.setDate(this.$props.taskData.expDate).time}}-->
                     <!--обратный отсчет-->
                 </span>
             </div>
@@ -27,7 +27,7 @@
         <q-card-section v-if="this.$props.cardView">
             <!-- Проект задачи -->
             <div class="text-overline flex justify-between">
-                <span class="text-orange-9">{{this.$props.taskData.projectMember}}</span>
+                <span class="text-orange-9">{{this.$props.taskData.projectMember.name}}</span>
                 <span
                     :class="setTaskStatusColor(this.$props.taskData.status)"
                 >
@@ -39,7 +39,7 @@
                 <span class="task-card__title">{{this.$props.taskData.title}}</span>
                 <div class="flex column items-end text-caption" >
                     <span class="text-orange-4">Приоритет: {{this.$props.taskData.priority}}</span>
-                    <span>{{this.setDate(this.$props.taskData.expDate).date}} / {{this.setDate(this.$props.taskData.expDate).time}}</span>
+                    <!--<span>{{this.setDate(this.$props.taskData.expDate).date}} / {{this.setDate(this.$props.taskData.expDate).time}}</span>-->
                 </div>
             </div>
             <!--Описание задачи-->
@@ -75,17 +75,17 @@
                 <q-card-section class="text-subtitle2">
                     <!--Кем создано-->
                     <div class="text-overline text-grey">
-                        Создатель: {{this.$props.taskData.createdBy.fullName}}
+                        Создатель:  {{this.$props.taskData.createdBy.fullName}}
                     </div>
                     <!--Когда создано-->
                     <div class="text-overline text-grey">
                         <span>Дата создания: </span>
-                        <span> {{this.setDate(this.$props.taskData.createdBy.createdDate).date}} / {{this.setDate(this.$props.taskData.createdBy.createdDate).time}}</span>
+                        <!-- <span>  {{this.$props.taskData.created.date}}</span> -->
                     </div>
                     <!-- ВСЕ участники задачи -->
-                    <div class="text-overline text-grey">
+                    <div class="text-overline text-grey" >
                         Участники:
-                        <ul class="cmn__list">
+                        <ul class="cmn__list" v-if="this.$props.taskData.members">
                             <li
                                 v-for="(member, i) of this.$props.taskData.members"
                                 :key="'member_' + i"
@@ -95,9 +95,9 @@
                         </ul>
                     </div>
                     <!-- Исполнители задачи -->
-                    <div class="text-overline text-grey">
+                    <div class="text-overline text-grey" >
                         Исполнители:
-                        <ul class="cmn__list">
+                        <ul class="cmn__list" v-if="this.$props.taskData.performers">
                             <li
                                 v-for="(performer, i) of this.$props.taskData.performers"
                                 :key="'performer_' + i"
@@ -125,7 +125,7 @@
 
                         Ответственное лицо:
 
-                        <p class="q-pl-xl">{{this.$props.taskData.master.fullName}}</p>
+                        <p class="q-pl-xl" v-if="this.$props.taskData.master">{{this.$props.taskData.master.fullName}}</p>
                         <!-- <ul class="cmn__list">
                             <li
                                 v-for="(master, i) of this.$props.taskData.master"

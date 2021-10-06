@@ -1,3 +1,5 @@
+<!-- Перемещено в ADMIN-->
+
 <template>
 
     <!--
@@ -106,7 +108,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapAtions } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
     import { FilterSort } from 'src/functions/FilterSort'
     import UserSelectionModal from 'src/components/COMMON/UserSelectionModal'
 
@@ -123,7 +125,7 @@
                 performers: null,
                 master: null,
                 projectMember: 'Нет',
-                projectOptions: ['Нет', 'Ам', 'Аптеки'],
+                // projectOptions: ['Нет', 'Ам', 'Аптеки'],
                 priority: 0,
                 expDate: 'Не выбрано',
 
@@ -133,29 +135,21 @@
         },
 
         methods: {
+            ...mapActions('task', ['CREATE_TASK']),
+
             createTaskMembersList(data) {
                 console.log(data)
             },
 
             getProjectsName() {
                 let projects = []
-
+                
                 this.projectList.forEach(pr => {
                     projects.push(pr.title)                    
                 })
 
                 return projects
             },
-
-            /*getUsersName() {
-                let users = []
-
-                this.userList.forEach(user => {
-                    users.push(user.fullName)                    
-                })
-
-                return users
-            },*/
 
             onSubmit() {
                 if (this.submit !== true) {
@@ -166,8 +160,18 @@
                         message: 'Вы должны подтвердить правильность введенных данных !'
                     })
                 } else {
-                    console.log(this.data)
-
+                    this.CREATE_TASK({
+                        title: this.title,
+                        description: this.description,
+                        members: this.members,
+                        performers: this.performers,
+                        master: this.master,
+                        projectMember: this.projectMember,
+                        priority: parseInt(this.priority, 10),
+                        expDate: this.expDate,
+                        created: new Date(),
+                        createdBy: { _id: this.activeUser._id, fullName: this.activeUser.fullName }
+                    })
                 }
             },
 

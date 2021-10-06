@@ -20,19 +20,19 @@
                 Список подзадач -> переход в 
 
         -->
-        <div class="task-info__part q-pa-sm"  v-if="this.currentTask">
+        <div class="task-info__part q-pa-sm">
             <q-list bordered separator>
                 <q-item clickable v-ripple >
                     <q-item-section>
                     <q-item-label overline>Группа проектов:</q-item-label>
-                    <q-item-label>{{this.currentTask.projectMember}}</q-item-label>
+                    <q-item-label>{{this.currentTask.projectMember.name}}</q-item-label>
                     </q-item-section>
                 </q-item>
 
                 <q-item clickable v-ripple >
                 <q-item-section>
                     <q-item-label overline>Название задачи:</q-item-label>
-                    <q-item-label>{{this.currentTask.title}} от <!--{{this.setDate(this.currentTask.createdBy.createdDate).date}}/{{this.setDate(this.currentTask.createdBy.createdDate).time}}--></q-item-label>
+                    <q-item-label>{{this.currentTask.title}} от {{this.setDate(this.currentTask.created.date).date}}</q-item-label>
                 </q-item-section>
                 </q-item>
 
