@@ -94,28 +94,23 @@
             </q-item>
         </q-list>
 
-        <div v-else class="q-mb-xl">Задач нет ?! Попробуйте изменить параметры фильтра или возьмите открытую задачу !</div>
+        <div v-else class="q-mb-xl">Задач нет ?! Возможно необходимо изменить параметры поиска ?</div>
 
-        Открытые задачи:
+        <ShortTaskCard
+            :title="'Открытые задачи'"
+            :emptyText="'Открытых задач пока нет...'"
+            :color="'#C10015'"
+            :tasks="this.openedTasks.length ? this.openedTasks : []"
+            @openTask="onClickOpenTask"
+        />
 
-        <ul>
-            <li
-                v-for="(openedTask, i) of openedTasks"
-                :key="'openedTask_i' + i"
-            >
-                {{openedTask.title}}
-            </li>
-        </ul>
-
-        Все задачи: <!-- Для тех, кто имеет доступ !-->
-        <ul>
-            <li
-                v-for="(task, i) of taskList"
-                :key="'task_i' + i"
-            >
-                {{task.title}}
-            </li>
-        </ul>
+        <ShortTaskCard
+            :title="'Все задачи'"
+            :emptyText="'Задач пока нет...'"
+            :color="'#1976D2'"
+            :tasks="this.taskList.length ? this.taskList : []"
+            @openTask="onClickOpenTask"
+        />
         
     </div>
 </template>
@@ -123,8 +118,7 @@
 <script>
     import { mapGetters, mapActions } from 'vuex'
     import TaskCard from 'src/components/TASK/TaskCard'
-
-    //import { FilterSort } from 'src/functions/FilterSort';
+    import ShortTaskCard from 'src/components/TASK/ShortTaskCard'
     //import ReverseBtn from 'src/components/COMMON/ReverseBtn'
 
     import { sortSelectMixin } from 'src/mixins/sortSelectMixin.js'
@@ -142,7 +136,8 @@
         mixins: [searchInputMixin, filterSelectMixin, sortSelectMixin],
 
         components: {
-            TaskCard
+            TaskCard,
+            ShortTaskCard
         },
 
         data() {
@@ -183,6 +178,10 @@
         },
 
         methods: {
+            onClickOpenTask(id) {
+                this.$router.push('task/' + id)
+            },
+
             reverse() {
                 //this.isReverseBtnClicked = true
                 console.log('reverse')

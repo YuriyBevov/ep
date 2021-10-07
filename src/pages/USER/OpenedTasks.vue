@@ -1,10 +1,9 @@
 <template>
-    <div class="user-tasks" style="max-width: 1100px;">
+    <div style="max-width: 1100px;">
+        <span>Открытые задачи:</span>
 
-        <span class="user-tasks__title">Мои задачи:</span>
-
-        <div class="user-tasks__header flex items-center q-mb-lg">
-            <div class="user-tasks__toggler q-mr-xl">
+        <div class="flex items-center q-mb-lg">
+            <div class="q-mr-xl">
                 <q-toggle
                     v-model="cardView"
                     color="green"
@@ -12,16 +11,15 @@
                 <span>Сокр./Подр.</span>
             </div>
 
-            <div class="user-tasks__search q-mr-xl">
+            <div class="q-mr-xl">
                 <!-- компонент поиска -->
                 <SearchInput 
                     :arr="this.openedTasks"
                     @search="setSearchField"
                 />
-
             </div>
 
-            <div class="user-tasks__sort q-mr-xl">
+            <div class="q-mr-xl">
                 <!-- компонент сортировки -->
                 <SortSelect
                     :sortOptions="['Без сортировки', 'По приоритету', 'По сроку выполнения']"
@@ -29,7 +27,7 @@
                 />
             </div>
 
-            <div class="user-tasks__reverse">
+            <div>
                 <!-- компонент реверсивной кнопки -->
                 <!-- <ReverseBtn
                     :reverseStatus="isReversed"
@@ -40,9 +38,8 @@
             </div>
         </div>
 
-        <q-list class="flex user-tasks__list" :style="!this.cardView ? 'flex-direction: column;' : null" v-if="filteredTasks.length">
+        <q-list class="flex q-mb-xl" :style="!this.cardView ? 'flex-direction: column;' : null" v-if="filteredTasks.length">
             <q-item
-                class="user-tasks__item"
                 :class="!cardView ? 'q-mb-xs q-mr-none' : 'q-mb-lg q-mr-lg'"
                 clickable 
                 v-ripple
@@ -58,17 +55,23 @@
             </q-item>
         </q-list>
 
-        <div v-else class="q-mb-xl">Задач нет ?! Попробуйте изменить параметры фильтра или возьмите открытую задачу !</div>
+        <div v-else class="q-mb-xl text-italic">Открытых задач пока нет...</div>
 
-        Все задачи: <!-- Для тех, кто имеет доступ !-->
-        <ul>
-            <li
-                v-for="(task, i) of taskList"
-                :key="'task_i' + i"
-            >
-                {{task.title}}
-            </li>
-        </ul>
+        <ShortTaskCard
+            :title="'Мои задачи'"
+            :emptyText="'Личных задач пока нет...'"
+            :color="'#21BA45'"
+            :tasks="this.activeUserTasks.length ? this.activeUserTasks : []"
+            @openTask="onClickOpenTask"
+        />
+
+        <ShortTaskCard
+            :title="'Все задачи'"
+            :emptyText="'Задач пока нет...'"
+            :color="'#1976D2'"
+            :tasks="this.taskList.length ? this.taskList : []"
+            @openTask="onClickOpenTask"
+        />
     </div>
 </template>
 
@@ -76,6 +79,7 @@
     import { mapGetters, mapActions } from 'vuex'
 
     import TaskCard from 'src/components/TASK/TaskCard'
+    import ShortTaskCard from 'src/components/TASK/ShortTaskCard'
 
     import { sortSelectMixin } from 'src/mixins/sortSelectMixin.js'
     import { searchInputMixin } from 'src/mixins/searchInputMixin.js'
@@ -89,7 +93,8 @@
         mixins: [searchInputMixin, sortSelectMixin],
 
         components: {
-            TaskCard
+            TaskCard,
+            ShortTaskCard
         },
 
         data() {
@@ -99,7 +104,7 @@
         },
 
         computed: {
-            ...mapGetters('task', ['openedTasks', 'taskList']),
+            ...mapGetters('task', ['openedTasks', 'taskList', 'activeUserTasks']),
 
             filteredTasks() {
                 let filteredData = this.openedTasks
@@ -123,6 +128,9 @@
         },
 
         methods: {
+            onClickOpenTask(id) {
+                this.$router.push('task/' + id)
+            },
             reverse() {
                 //this.isReverseBtnClicked = true
                 console.log('reverse')

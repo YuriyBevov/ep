@@ -366,14 +366,13 @@ const actions = {
     GET_TASK_LIST({commit}) {
         axiosInstance.get('task/get_tasks')
         .then((tasks) => {
-            console.log(tasks.data)
             commit('FILL_TASK_LIST', tasks.data)
         })
         .catch(err => console.log(err))
     },
 
     CREATE_TASK({commit}, task) {
-
+        console.log(task)
         axiosInstance.post('task/add_task', task)
         .then((resp) => {
             console.log(resp.data)
@@ -404,15 +403,15 @@ const getters = {
 
         const users = rootGetters.user.userList
         const departments = rootGetters.department.departmentList
-        const projects = rootGetters.project.projectList
+        const projects = rootGetters.project.projectList*/
 
 
         state.taskList.forEach(task => {
-            fillUserData(task.members, users)
+            /*fillUserData(task.members, users)
             fillUserData(task.performers, users)
 
             task.subtasks ?
-            fillSubtaskData(task.subtasks, state.taskList) : null
+            fillSubtaskData(task.subtasks, state.taskList) : null*/
 
             /*users.find(user => {
                 user.id === task.master.id ?
@@ -424,13 +423,14 @@ const getters = {
                 task.created.by.fullName = user.fullName : null
             }) */
 
-            /*task.statusDesc =   task.status === 'isOpened' ? 'Открытая задача' :
+            //Убрать на сервер
+            task.statusDesc =   task.status === 'isOpened' ? 'Открытая задача' :
                                 task.status === 'inWork'   ? 'В работе'        :
                                 task.status === 'isFrozen' ? 'Приостановлена'  :
                                 task.status === 'isDone'   ? 'Выполнена'       :
                                 task.status === 'isClosed' ? 'Закрыта'         : null
 
-            departments.forEach(dep => {
+            /*departments.forEach(dep => {
                 dep.id === task.department.id ?
                 task.department.title = dep.title : null
             })
@@ -438,8 +438,8 @@ const getters = {
             projects.forEach(proj => {
                 proj.id === task.projectMember.id ?
                 task.projectMember.name = proj.projectGroup.name : null
-            })
-        })*/
+            })*/
+        })
 
         return state.taskList
     },

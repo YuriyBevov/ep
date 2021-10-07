@@ -6,13 +6,16 @@ const TaskSchema = new Schema({
     status: { type: String, required: true, default: 'isOpened' },
     members: { type: Array },
     performers: { type: Array },
-    master: { type: Array },
+    master: { type: Object },
     projectMember: { type: String },
     priority: { type: Number },
     expDate: { type: Date },
     created: { type: Date, required: true},
     createdBy: { type: Object, required: true },
     subtasks: { type: Array }
+
+    // поля , которые будут добавляться из других моделей , перед отправкой на клиент
+    // department, 
 }, {
   collection: 'tasks'
 })

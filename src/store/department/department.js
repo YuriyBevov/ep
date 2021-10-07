@@ -1,5 +1,7 @@
 // import { axiosInstance } from 'src/boot/axios'
 
+import { axiosInstance } from "src/boot/axios"
+
 const departments = [
    {
         id: '1',
@@ -80,6 +82,16 @@ const mutations = {
 const actions = {
     GET_DEPARTMENTS_LIST({commit}) {
         commit('SET_DEPARTMENTS_LIST', departments)
+    },
+
+    CREATE_DEPARTMENT({commit}, department) {
+        console.log('department', department)
+        
+        /*axiosInstance.post('department/create_department', department)
+        .then((resp) => {
+            console.log(resp.data)
+        })
+        .catch(err => console.log(err))*/
     }
 }
 

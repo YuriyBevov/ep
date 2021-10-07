@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <!-- <div 
+        <div 
             style="width: 100%; max-width: 500px;"
             class="flex items-center justify-end"
         >
@@ -35,7 +35,7 @@
             >
                 <q-icon name="keyboard_arrow_down" size="md" color="secondary"/>
             </q-checkbox>
-        </div>-->
+        </div>
 
         <div 
             v-for="(user, i) of filteredUserList"
@@ -90,8 +90,8 @@
         data() {
             return {
                 members: [],
-                //includeAllAsMember: false,
-                //includeAllAsPerformer: false
+                includeAllAsMember: false,
+                includeAllAsPerformer: false
             }
         },
 
@@ -112,8 +112,8 @@
         },
 
         methods: {
-           /* includeAll(role) {
-                console.log(this.filterOption === '')
+           includeAll(role) {
+                console.log(this.filterOption === '', this.filterOption, role)
 
                 /*this.filterOption === '' || this.filterOption === 'Все отделы' ?
 
@@ -124,14 +124,14 @@
                 this.members.forEach(member => {
                     console.log(member)
                     member[role] === true && member.department === this.filterOption ? member[role] = false : member[role] === false && member.department === this.filterOption ? member[role] = true : null
-                }) */
+                })
 
-               /* if(this.filterOption === '' || this.filterOption === 'Все отделы') {
+               if(this.filterOption === '' || this.filterOption === 'Все отделы') {
                     console.log('all')
                 } else {
                     console.log('not')
-                }
-            },*/
+                }*/
+            },
 
             poolData() {
                 this.$props.users.forEach(member => {                  

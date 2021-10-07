@@ -37,18 +37,6 @@
                 label="Описание:"
             />
 
-            <q-btn @click="isMemberSelectionOpened = !isMemberSelectionOpened">Выбор состава задачи</q-btn>
-
-            <q-dialog v-model="isMemberSelectionOpened" transition-show="fade" transition-hide="fade" full-width>
-                <q-card style="height: 50vh; " class="flex column no-wrap q-pa-lg" >
-                    <UserSelectionModal
-                        :users="this.userList"
-                        :departments="this.departmentList"
-                        @chooseResult="createTaskMembersList"
-                    />
-                </q-card>
-            </q-dialog>
-
             <q-select 
                 filled 
                 v-model="projectMember" 
@@ -68,6 +56,34 @@
                     val => val < 11 || 'Приоритет варьируется от 0 до 10, по умолчанию 0'
                 ]"
             />
+
+            <q-btn @click="isMemberSelectionOpened = !isMemberSelectionOpened">Выбор состава задачи</q-btn>
+
+            <q-dialog v-model="isMemberSelectionOpened" transition-show="fade" transition-hide="fade" full-width>
+                <q-card style="height: 50vh; " class="flex column no-wrap q-pa-lg" >
+                    <!-- <UserSelectionModal
+                        :users="this.userList"
+                        :departments="this.departmentList"
+                        @chooseResult="createTaskMembersList"
+                    /> -->
+                    <UserSelection
+                        :type="'task_create'"
+                        :users="this.userList"
+                        @memberList="fillMemberList"
+                    />
+                </q-card>
+            </q-dialog>
+
+            <div v-if="this.memberList.length">
+                <q-list bordered>
+                    <q-item
+                        v-for="(member, i) of this.memberList"
+                        :key="'member_i' + i"
+                    >
+                        {{member.fullName}} ( {{member.isHead ? 'Рук.' : null }} {{member.isMaster ? 'Отв.' : null }} {{ member.isPerformer ? 'Исп.' : null }} {{ member.isMember ? 'Уч-к.' : null }} )
+                    </q-item>
+                </q-list>
+            </div>
 
             <!--убрать в компонент выбора даты и времени-->
             <q-input filled v-model="expDate" label="Срок сдачи:">
@@ -109,36 +125,37 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
-    import { FilterSort } from 'src/functions/FilterSort'
-    import UserSelectionModal from 'src/components/COMMON/UserSelectionModal'
+    import UserSelection from 'src/components/COMMON/UserSelection'
 
     export default {
         components: {
-            UserSelectionModal
+            UserSelection
         },
 
         data () {
             return {
-                title: null,
+                title: 1,
                 description: 'Без описания',
                 members: null,
                 performers: null,
                 master: null,
-                projectMember: 'Нет',
+                projectMember: 'Без привязки к проекту',
                 // projectOptions: ['Нет', 'Ам', 'Аптеки'],
                 priority: 0,
                 expDate: 'Не выбрано',
 
-                submit: false,
+                submit: true,
                 isMemberSelectionOpened: false,
+                memberList: []
             }
         },
 
         methods: {
             ...mapActions('task', ['CREATE_TASK']),
 
-            createTaskMembersList(data) {
-                console.log(data)
+            fillMemberList(members) {
+                this.memberList = members
+                this.isMemberSelectionOpened = false
             },
 
             getProjectsName() {
@@ -160,15 +177,29 @@
                         message: 'Вы должны подтвердить правильность введенных данных !'
                     })
                 } else {
+                    let members = []
+                    let performers = []
+                    let master = null
+
+                    this.memberList.forEach(member => {
+                        member.isMember ?
+                        members.push({ _id: member._id }) : null
+                        member.isPerformer ?
+                        performers.push({ _id: member._id }) : null
+                        member.isMaster ?
+                        master = { _id: member._id } : null
+                        
+                    })
+
                     this.CREATE_TASK({
                         title: this.title,
                         description: this.description,
-                        members: this.members,
-                        performers: this.performers,
-                        master: this.master,
-                        projectMember: this.projectMember,
+                        members: members.length ? members : null,
+                        performers: performers.length ? performers : null,
+                        master: master !== null ? master : null,
+                        projectMember: this.projectMember === 'Без привязки к проекту' ? null : this.projectMember,
                         priority: parseInt(this.priority, 10),
-                        expDate: this.expDate,
+                        expDate: this.expDate === 'Не выбрано'? null : this.expDate,
                         created: new Date(),
                         createdBy: { _id: this.activeUser._id, fullName: this.activeUser.fullName }
                     })

@@ -110,7 +110,6 @@
             <q-separator />
           </div>
 
-
           <!-- ИНТЕРФЕЙС СУПЕРАДМИНА -->
 
           <div v-if="roles && roles.find(role => role === 'superadmin')">
@@ -122,7 +121,16 @@
               <q-item-section>
                 Добавить пользователя
               </q-item-section>
+            </q-item>
 
+            <q-item clickable v-ripple :to="'/create_department'">
+              <q-item-section avatar>
+                <q-icon name="dashboard" color="negative"/>
+              </q-item-section>
+
+              <q-item-section>
+                Создать отдел
+              </q-item-section>
             </q-item>
           </div>
 

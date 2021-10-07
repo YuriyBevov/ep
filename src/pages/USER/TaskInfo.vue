@@ -1,6 +1,5 @@
 <template>
     <div class="task-info">
-
         <!-- 
 
             Подробная карточка задачи.
@@ -20,19 +19,20 @@
                 Список подзадач -> переход в 
 
         -->
-        <div class="task-info__part q-pa-sm">
+
+        <div class="task-info__part q-pa-sm" v-if="this.currentTask">
             <q-list bordered separator>
                 <q-item clickable v-ripple >
                     <q-item-section>
                     <q-item-label overline>Группа проектов:</q-item-label>
-                    <q-item-label>{{this.currentTask.projectMember.name}}</q-item-label>
+                    <q-item-label class="text-orange-9">{{this.currentTask.projectMember ? this.currentTask.projectMember : 'Б/П'}}</q-item-label>
                     </q-item-section>
                 </q-item>
 
                 <q-item clickable v-ripple >
                 <q-item-section>
                     <q-item-label overline>Название задачи:</q-item-label>
-                    <q-item-label>{{this.currentTask.title}} от {{this.setDate(this.currentTask.created.date).date}}</q-item-label>
+                    <q-item-label>{{this.currentTask.title}} от {{setDate(this.currentTask.created)}}</q-item-label>
                 </q-item-section>
                 </q-item>
 
@@ -45,15 +45,19 @@
 
                 <q-item clickable v-ripple class="flex column">
                     <q-item-section>
-                    <q-item-label overline>Статус задачи:</q-item-label>
-                    <q-item-label>{{this.currentTask.statusDesc}}</q-item-label>
+                        <q-item-label overline>Статус задачи:</q-item-label>
+                        <q-item-label>
+                            <span :class="setTaskStatusColor(this.currentTask.status)">
+                                {{this.currentTask.statusDesc}}
+                            </span>
+                        </q-item-label>
                     </q-item-section>
                 </q-item>
 
                 <q-item clickable v-ripple class="flex column">
                     <q-item-section>
                     <q-item-label overline>Дата сдачи:</q-item-label>
-                    <!--<q-item-label>{{this.setDate(this.currentTask.expDate).date}}/{{this.setDate(this.currentTask.expDate).time}}</q-item-label>-->
+                    <q-item-label>{{setDate(this.currentTask.expDate)}}</q-item-label>
                     </q-item-section>
                 </q-item>
 
@@ -61,17 +65,17 @@
                     <q-item-section>
                         <q-item-label overline>Отделы:</q-item-label>
                         <q-item-label>
-                            <span>{{this.currentTask.department.title}}</span>
+                            <span>{{ this.currentTask.department ? this.currentTask.department.title : 'Свободная задача'}}</span>
                         </q-item-label>
                     </q-item-section>
                 </q-item>
 
                 <q-item clickable v-ripple class="flex column">
                     <q-item-section>
-                        <q-item-label overline>Ответственные лица:</q-item-label>
+                        <q-item-label overline>Ответственное лицо:</q-item-label>
                         <q-item-label>
                             <span>
-                                <!--{{ this.currentTask.master.fullName }} вызывает ошибку-->
+                                {{ this.currentTask.master ? this.currentTask.master : 'Не выбрано' }}
                             </span>
                         </q-item-label>
                     </q-item-section>
@@ -80,7 +84,7 @@
                 <q-item clickable v-ripple class="flex column">
                     <q-item-section>
                         <q-item-label overline>Исполнители:</q-item-label>
-                        <q-item-label>
+                        <q-item-label v-if="this.currentTask.performers">
                             <span 
                                 v-for="(perf, i) of this.currentTask.performers"     
                                 :key="'perf_' + i"
@@ -88,19 +92,25 @@
                                 {{perf.fullName}} <span v-if="i < currentTask.performers.length - 1">/</span>
                             </span>
                         </q-item-label>
+                        <q-item-label v-else>
+                            <span>Не выбраны</span>
+                        </q-item-label>
                     </q-item-section>
                 </q-item>
 
                 <q-item clickable v-ripple class="flex column">
                     <q-item-section>
                         <q-item-label overline>Участники:</q-item-label>
-                        <q-item-label>
+                        <q-item-label v-if="this.currentTask.members">
                             <span 
                                 v-for="(member, i) of this.currentTask.members"     
                                 :key="'member_' + i"
                             >   
                                 {{member.fullName}} <span v-if="i < currentTask.members.length - 1">/</span>
                             </span>
+                        </q-item-label>
+                        <q-item-label v-else>
+                            <span>Не выбраны</span>
                         </q-item-label>
                     </q-item-section>
                 </q-item>
@@ -170,7 +180,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { getDate } from 'src/functions/getDate.js'
+    import { date } from 'quasar'
+    import { getTaskStatusColor } from 'src/functions/getTaskStatusColor.js'
 
     export default {
         name: "TaskInfo",
@@ -204,13 +215,16 @@
                 console.log('change')
             },
 
-            setTaskInfo() {
-                this.currentTask = this.taskList.find(task => task.id === this.$route.params.id)
-                console.log(this.currentTask)
+            setTaskStatusColor(status) {
+                return getTaskStatusColor(status)
             },
 
-            setDate(date) {
-                return getDate(date);
+            setTaskInfo() {
+                this.currentTask = this.taskList.find(task => task._id === this.$route.params.id)
+            },
+
+            setDate(timeStamp) {
+                return date.formatDate(timeStamp, 'DD.MM.YY HH:mm')
             },
         },
 

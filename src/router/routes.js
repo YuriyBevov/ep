@@ -14,6 +14,7 @@ const routes = [
 
       // не защищенный пока(суперадмин)
       { path: '/create_user', component: () => import('pages/SUPERADMIN/CreateUser.vue') },
+      { path: '/create_department', component: () => import('pages/SUPERADMIN/CreateDepartment.vue') },
       // не защищенный (админ)
       { path: '/create_task', component: () => import('pages/ADMIN/CreateTask.vue') },
       

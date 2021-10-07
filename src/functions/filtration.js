@@ -1,5 +1,3 @@
-import department from "src/store/department/department"
-
 export function filtration(arr, option, objKey, innerObjKey = null) {
 
     return arr.filter(item => { 

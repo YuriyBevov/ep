@@ -3,7 +3,7 @@ const { TaskModel, UserModel } = require('../models/index.js');
 class taskControllers {
     async addTask(req, res) {
         try {          
-            const { title, master } = req.body
+            const { title, master, members } = req.body
 
             await TaskModel.findOne({title})
             .then((isExist) => {
@@ -11,9 +11,14 @@ class taskControllers {
                     return res.status(400).json({
                         message: 'Задача с таким именем уже существует !'
                     })
-                } else {
-                    master === null ?
-                    req.body.status = 'isOpened' : 'inWork'
+                } else if(members && !master) {
+                    return res.status(400).json({
+                        message: 'Если вы выбрали участников задачи, то должно быть назначено ответственное лицо !'
+                    })
+                }               
+                else {
+                    master ?
+                    req.body.status = 'inWork' : 'isOpened'
 
                     new TaskModel(req.body).save();
             
@@ -40,6 +45,13 @@ class taskControllers {
         try {
             await TaskModel.find({})
             .then((tasks) => {
+                /*tasks.forEach(task => {
+                    task.status =   task.status === 'isOpened' ? 'Открытая задача' :
+                                    task.status === 'inWork'   ? 'В работе'        :
+                                    task.status === 'isFrozen' ? 'Приостановлена'  :
+                                    task.status === 'isDone'   ? 'Выполнена'       :
+                                    task.status === 'isClosed' ? 'Закрыта'         : null
+                }) */
                 return res.status(200).json(tasks)
             })
             .catch(err => {

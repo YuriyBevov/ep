@@ -12,36 +12,39 @@
                     :class="setTaskStatusColor(this.$props.taskData.status)"
                     class="q-mr-lg"
                 >
-                    {{this.$props.taskData.statusDesc}}
+                    {{ this.$props.taskData.statusDesc }}
                 </span>
 
                 <span class="text-orange-4 q-mr-lg">Приоритет: {{this.$props.taskData.priority}}</span>
 
                 <span class="text-caption">
-                    <!--{{this.setDate(this.$props.taskData.expDate).date}} / {{this.setDate(this.$props.taskData.expDate).time}}-->
-                    <!--обратный отсчет-->
+                    {{ setDate(this.$props.taskData.expDate) }}
                 </span>
             </div>
         </q-card-section>
-        
+
         <q-card-section v-if="this.$props.cardView">
             <!-- Проект задачи -->
             <div class="text-overline flex justify-between">
-                <span class="text-orange-9">{{this.$props.taskData.projectMember.name}}</span>
+                <span class="text-orange-9">
+                    {{this.$props.taskData.projectMember ? this.$props.taskData.projectMember : 'Б/П'}}
+                </span>
                 <span
                     :class="setTaskStatusColor(this.$props.taskData.status)"
                 >
-                    {{this.$props.taskData.statusDesc}}
+                    {{ this.$props.taskData.statusDesc }}
                 </span>
             </div>
+
             <!-- Название задачи -->  
             <div class="text-h5 q-mt-sm q-mb-xs flex justify-between items-center">
                 <span class="task-card__title">{{this.$props.taskData.title}}</span>
                 <div class="flex column items-end text-caption" >
                     <span class="text-orange-4">Приоритет: {{this.$props.taskData.priority}}</span>
-                    <!--<span>{{this.setDate(this.$props.taskData.expDate).date}} / {{this.setDate(this.$props.taskData.expDate).time}}</span>-->
+                    <span>{{setDate(this.$props.taskData.expDate)}}</span>
                 </div>
             </div>
+
             <!--Описание задачи-->
             <div class="text-caption text-grey cmn__text cmn__text--ellipsys">
                 {{this.$props.taskData.description}}
@@ -54,10 +57,11 @@
                 color="dark" 
                 icon-right="navigate_next"
                 :label="this.$props.cardView ? 'Перейти в задачу' : null"
-                @click="onClickOpenTaskInfo($props.taskData.id)"
+                @click="onClickOpenTaskInfo($props.taskData._id)"
             />
 
             <q-space />
+
             <q-btn
                 color="grey"
                 round
@@ -73,15 +77,18 @@
             <div v-show="isCardExpanded && this.$props.cardView">
                 <q-separator/>
                 <q-card-section class="text-subtitle2">
+
                     <!--Кем создано-->
                     <div class="text-overline text-grey">
                         Создатель:  {{this.$props.taskData.createdBy.fullName}}
                     </div>
+
                     <!--Когда создано-->
                     <div class="text-overline text-grey">
                         <span>Дата создания: </span>
-                        <!-- <span>  {{this.$props.taskData.created.date}}</span> -->
+                        <span>  {{setDate(this.$props.taskData.created)}}</span>
                     </div>
+
                     <!-- ВСЕ участники задачи -->
                     <div class="text-overline text-grey" >
                         Участники:
@@ -93,7 +100,9 @@
                                 {{member.fullName}}
                             </li>
                         </ul>
+                        <span v-else>Не выбраны</span>
                     </div>
+
                     <!-- Исполнители задачи -->
                     <div class="text-overline text-grey" >
                         Исполнители:
@@ -105,12 +114,20 @@
                                 {{performer.fullName}}
                             </li>
                         </ul>
+                        <span v-else>Не выбраны</span>
                     </div>
-                    <!-- Подзадачи -->
 
+                    <!-- Отв лицо задачи -->
+                    <div class="text-overline text-grey">
+                        Ответственное лицо:
+                        <span class="q-pl-xl" v-if="this.$props.taskData.master">{{this.$props.taskData.master.fullName}}</span>
+                        <span v-else>Не выбрано</span>
+                    </div>
+
+                    <!-- Подзадачи -->
                     <div class="text-overline text-grey">
                         Подзадачи:
-                        <ul class="cmn__list" v-if="this.$props.taskData.subtasks">
+                        <ul class="cmn__list" v-if="this.$props.taskData.subtasks.length">
                             <li
                                 v-for="(subtask, i) of this.$props.taskData.subtasks"
                                 :key="'subtask_' + i"
@@ -120,22 +137,6 @@
                         </ul>
                         <span v-else>Нет</span>
                     </div>
-                    <!-- Отв лицо задачи -->
-                    <div class="text-overline text-grey">
-
-                        Ответственное лицо:
-
-                        <p class="q-pl-xl" v-if="this.$props.taskData.master">{{this.$props.taskData.master.fullName}}</p>
-                        <!-- <ul class="cmn__list">
-                            <li
-                                v-for="(master, i) of this.$props.taskData.master"
-                                :key="'master_' + i"
-                            >
-                                {{master.fullName}}
-                            </li>
-                        </ul> -->
-                    </div>
-
 
                 </q-card-section>
             </div>
@@ -144,7 +145,8 @@
 </template>
 
 <script>
-    import { getDate } from 'src/functions/getDate.js'
+    import { getTaskStatusColor } from 'src/functions/getTaskStatusColor.js'
+    import { date } from 'quasar'
 
     export default {
         name: "TaskCard",
@@ -161,23 +163,23 @@
         },
 
         methods: {
-            setTaskStatusColor(statusList) {
-
-                return  this.$props.taskData.status === 'isOpened' ? 'text-red-14'   :
-                        this.$props.taskData.status === 'inWork'   ? 'text-green-12' :
-                        this.$props.taskData.status === 'isFrozen' ? 'text-grey-4'   :
-                        this.$props.taskData.status === 'isDone'   ? 'text-green-10' :
-                        this.$props.taskData.status === 'isClosed' ? 'text-grey-10'  : null
+            setTaskStatusColor(status) {
+                console.log('setTaskStatusColor')
+                return getTaskStatusColor(status)
             },
 
-            setDate(date) {
-                return getDate(date);
+            setDate(timeStamp) {
+                return date.formatDate(timeStamp, 'DD.MM.YY HH:mm')
             },
 
             onClickOpenTaskInfo(id) {
-                this.$router.push('/task/' + id)
+                this.$router.push('task/' + id)
             }
-        }
+        },
+
+        /*mounted() {
+            let formattedString = date.formatDate(this.$props.taskData.created, 'DD.MM.YY HH:mm')
+        }*/
     }
 </script>
 
