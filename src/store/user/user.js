@@ -63,12 +63,17 @@ const actions = {
         }, 4*60*60*1000)
     },
 
-    CREATE_USER({commit}, user) {
+    CREATE_USER({commit, dispatch}, user) {
+        dispatch('common/CHANGE_LOADING_STATE', true, { root: true })
+
         axiosInstance.post('user/add_user', user)
         .then((resp) => {
             dispatch('GET_USER_LIST')
         })
         .catch(err => console.log(err))
+        .finally(() => {
+            dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
+        })
     },
 
     GET_USER_LIST({commit}) {
@@ -81,32 +86,7 @@ const actions = {
 }
 
 const getters = {
-    userList: (state, {}, rootGetters)  => {
-        /*function fillData(resArr, entList, objKey) {
-            resArr.forEach(resArrItem => {
-                entList.forEach(entListItem => {
-                    resArrItem.id === entListItem.id ?
-                    resArrItem[objKey] = entListItem[objKey] : null
-                })
-            })
-        }
-
-        const tasks = rootGetters.task.taskList
-        const departments = rootGetters.department.departmentList
-
-        state.userList.forEach(user => {
-            fillData(user.taskMember, tasks, 'title')
-            fillData(user.taskMaster, tasks, 'title')
-            fillData(user.taskPerformer, tasks, 'title')
-
-            departments.forEach(dep => {
-                dep.id === user.department.id ?
-                user.department.title = dep.title: null
-            })
-        })*/
-
-        return state.userList
-    },
+    userList: state => state.userList,
 
     activeUser: state => state.activeUser,
 

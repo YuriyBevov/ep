@@ -6,7 +6,10 @@ class departmentsControllers {
             
             await DepartmentModel.find({})
             .then((departments) => {
-                return res.status(200).json(departments)
+                return res.status(200).json({
+                    message: 'Новый отдел успешно создан !',
+                    departments
+                })
             })
             .catch(err => {
                 return res.status(400).json({

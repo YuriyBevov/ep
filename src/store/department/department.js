@@ -14,19 +14,28 @@ const mutations = {
 const actions = {
     GET_DEPARTMENT_LIST({commit}) {
         axiosInstance.get('departments/get_departments')
-        .then((departments) => {
-            console.log('getDepartmentList')
-            commit('SET_DEPARTMENTS_LIST', departments.data)
+        .then((payload) => {
+            commit('SET_DEPARTMENTS_LIST', payload.data.departments)
         })
         .catch(err => console.log(err))
     },
 
     CREATE_DEPARTMENT({commit, dispatch}, department) {
+        dispatch('common/CHANGE_LOADING_STATE', true, { root: true })
+
         axiosInstance.post('departments/create_department', department)
         .then((resp) => {
             dispatch('GET_DEPARTMENT_LIST')
+            console.log('ok', resp)
+            //dispatch('common/SET_SERVER_ANSWER_MODAL', { message: resp.data.message, isOpened: true }, {root: true})
         })
-        .catch(err => console.log(err))
+        .catch((err) => {
+            console.log('err', err)
+            //dispatch('common/SET_SERVER_ANSWER_MODAL', { message: err.message, isOpened: true }, {root: true}) // не рабтает, нужно показывать сообщение
+        })
+        .finally(() => {
+            dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
+        })
     }
 }
 

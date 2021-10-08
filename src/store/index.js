@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import common from './common/common.js'
 import init from './init/init.js'
 import auth from './auth/auth.js'
 import user from './user/user.js'
@@ -21,6 +22,7 @@ Vue.use(Vuex)
 
 const Store = new Vuex.Store({
   modules: {
+    common,
     init,
     auth,
     user,

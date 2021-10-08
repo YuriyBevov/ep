@@ -2,12 +2,7 @@ import { axiosInstance } from 'src/boot/axios'
 
 const actions = {
     INIT_APP({ commit, dispatch }) {
-        console.log('init_app')
-
-        /*dispatch('project/GET_PROJECTS', {}, {root: true})
-        dispatch('user/GET_USER_LIST', {}, {root: true}),
-        dispatch('task/GET_TASKS', {}, {root: true})
-        dispatch('departments/GET_DEPARTMENTS', {}, {root: true}),*/
+        dispatch('common/CHANGE_LOADING_STATE', true, { root: true })
 
         dispatch('user/AUTHENTICATION', {}, {root: true})
         dispatch('department/GET_DEPARTMENT_LIST', {}, {root: true}),
@@ -18,7 +13,14 @@ const actions = {
             console.log(resp.data)
         })
         .catch(err => console.log(err))
-    }
+        .finally(() => {
+            dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
+        })
+    },
+
+    CHANGE_LOADING_STATE({commit}, payload) {
+        commit('SET_LOADING_STATE', payload)
+    },
 }
 
 const mutations = {
@@ -26,11 +28,10 @@ const mutations = {
 }
 
 const state = {
-    
+
 }
 
 const getters = {
-
 
 }
 

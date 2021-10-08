@@ -21,12 +21,16 @@ const actions = {
     },
 
     CREATE_TASK({commit, dispatch}, task) {
+        dispatch('common/CHANGE_LOADING_STATE', true, { root: true })
 
         axiosInstance.post('task/add_task', task)
         .then((resp) => {
             dispatch('GET_TASK_LIST')
         })
         .catch(err => console.log(err))
+        .finally(() => {
+            dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
+        })
     }
 }
 
