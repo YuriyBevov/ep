@@ -41,7 +41,7 @@ const userAPI = require('./routes/user.route');
 //const projectAPI = require('./routes/project.route');
 //const projectGroupAPI = require('./routes/projectGroup.route');
 const taskAPI = require('./routes/task.route');
-//const departmentsAPI = require('./routes/departments.route');
+const departmentsAPI = require('./routes/departments.route');
 
 app.use('/init', initAPI);
 app.use('/auth', authAPI);
@@ -50,7 +50,7 @@ app.use('/user', userAPI);
 //app.use('/project', projectAPI);
 //app.use('/projectGroup', projectGroupAPI);
 app.use('/task', taskAPI);
-//app.use('/departments', departmentsAPI);
+app.use('/departments', departmentsAPI);
 
 //app.use(express.static(__dirname + '/public/upload'));
 

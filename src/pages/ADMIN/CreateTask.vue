@@ -1,21 +1,4 @@
-<!-- Перемещено в ADMIN-->
-
 <template>
-
-    <!--
-
-        1) название задачи+ (валидация на уникальность, на заполненность+)
-        2) описание задачи+
-        3) материалы(фото) + подпись к ним (пока -)
-        4) отв лицо (если его нет => задача открытая)+
-        5) исполнители(пока просто протыкать, в дальнейшем по отделам)+
-        6) в какой отдел направлен(в дальнейшем => при выборе отдела выбераются все участники, как исполнители)
-        7) приоритет+
-        8) добавить задачу в проект+
-        9) участники задачи+
-        10) срок и дата выполнения+
-        
-    -->
     <div class="create-task q-pa-md" style="max-width: 400px">
 
         <q-form
@@ -44,6 +27,14 @@
                 label="Добавить в проект:" 
             />
 
+            <q-select 
+                filled 
+                v-model="department" 
+                :options="getDepartments()"
+                label="Отправить в отдел:"
+                @input="memberList = []"
+            />
+
             <q-input
                 filled
                 type="number"
@@ -61,14 +52,9 @@
 
             <q-dialog v-model="isMemberSelectionOpened" transition-show="fade" transition-hide="fade" full-width>
                 <q-card style="height: 50vh; " class="flex column no-wrap q-pa-lg" >
-                    <!-- <UserSelectionModal
-                        :users="this.userList"
-                        :departments="this.departmentList"
-                        @chooseResult="createTaskMembersList"
-                    /> -->
                     <UserSelection
                         :type="'task_create'"
-                        :users="this.userList"
+                        :users="filteredUserList()"
                         @memberList="fillMemberList"
                     />
                 </q-card>
@@ -134,15 +120,15 @@
 
         data () {
             return {
-                title: 1,
+                title: '',
                 description: 'Без описания',
                 members: null,
                 performers: null,
                 master: null,
                 projectMember: 'Без привязки к проекту',
-                // projectOptions: ['Нет', 'Ам', 'Аптеки'],
                 priority: 0,
                 expDate: 'Не выбрано',
+                department: 'Без привязки к отделу',
 
                 submit: true,
                 isMemberSelectionOpened: false,
@@ -156,6 +142,24 @@
             fillMemberList(members) {
                 this.memberList = members
                 this.isMemberSelectionOpened = false
+            },
+
+            filteredUserList() {
+                if(this.department !== 'Без привязки к отделу') {
+                    return this.userList.filter(user => user.department === this.department)
+                }
+
+                return this.userList
+            },
+
+            getDepartments() {
+                let deps = []
+
+                this.departmentList.forEach(dep => {
+                    deps.push(dep.title)                    
+                })
+
+                return ['Без привязки к отделу', ...deps]
             },
 
             getProjectsName() {
@@ -188,7 +192,6 @@
                         performers.push({ _id: member._id }) : null
                         member.isMaster ?
                         master = { _id: member._id } : null
-                        
                     })
 
                     this.CREATE_TASK({
@@ -199,10 +202,13 @@
                         master: master !== null ? master : null,
                         projectMember: this.projectMember === 'Без привязки к проекту' ? null : this.projectMember,
                         priority: parseInt(this.priority, 10),
+                        department: this.department,
                         expDate: this.expDate === 'Не выбрано'? null : this.expDate,
                         created: new Date(),
                         createdBy: { _id: this.activeUser._id, fullName: this.activeUser.fullName }
                     })
+
+                    this.onReset()
                 }
             },
 
@@ -210,6 +216,7 @@
                 this.title = null
                 this.description = null
                 this.submit = false
+                this.memberList = []
             }
         },
 

@@ -29,7 +29,7 @@
     <q-drawer
       v-model="drawer"
 
-      :width="250"
+      :width="300"
       :breakpoint="500"
       bordered
     >
@@ -113,13 +113,33 @@
           <!-- ИНТЕРФЕЙС СУПЕРАДМИНА -->
 
           <div v-if="roles && roles.find(role => role === 'superadmin')">
-            <q-item clickable v-ripple :to="'/create_user'">
+            <q-item clickable v-ripple :to="'/users'">
               <q-item-section avatar>
                 <q-icon name="person" color="negative"/>
               </q-item-section>
 
               <q-item-section>
+                Пользователи
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple :to="'/create_user'">
+              <q-item-section avatar>
+                <q-icon name="manage_accounts" color="negative"/>
+              </q-item-section>
+
+              <q-item-section>
                 Добавить пользователя
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple :to="'/departments'">
+              <q-item-section avatar>
+                <q-icon name="home_work" color="negative"/>
+              </q-item-section>
+
+              <q-item-section>
+                Отделы
               </q-item-section>
             </q-item>
 
@@ -132,6 +152,7 @@
                 Создать отдел
               </q-item-section>
             </q-item>
+
           </div>
 
         </q-list>

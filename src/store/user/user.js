@@ -2,7 +2,6 @@ import { axiosInstance } from 'src/boot/axios'
 
 const state = {
     userList: [],
-
     activeUser: {}
 }
 
@@ -67,13 +66,12 @@ const actions = {
     CREATE_USER({commit}, user) {
         axiosInstance.post('user/add_user', user)
         .then((resp) => {
-            // console.log(resp.data)
+            dispatch('GET_USER_LIST')
         })
         .catch(err => console.log(err))
     },
 
     GET_USER_LIST({commit}) {
-        console.log('GET_USER_LIST')
         axiosInstance.get('user/get_users')
         .then((users) => {
             commit('SET_USER_LIST', users.data)

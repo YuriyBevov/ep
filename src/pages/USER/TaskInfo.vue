@@ -48,7 +48,7 @@
                         <q-item-label overline>Статус задачи:</q-item-label>
                         <q-item-label>
                             <span :class="setTaskStatusColor(this.currentTask.status)">
-                                {{this.currentTask.statusDesc}}
+                                {{translate(this.currentTask.status)}}
                             </span>
                         </q-item-label>
                     </q-item-section>
@@ -63,9 +63,9 @@
 
                 <q-item clickable v-ripple class="flex column">
                     <q-item-section>
-                        <q-item-label overline>Отделы:</q-item-label>
+                        <q-item-label overline>Отдел:</q-item-label>
                         <q-item-label>
-                            <span>{{ this.currentTask.department ? this.currentTask.department.title : 'Свободная задача'}}</span>
+                            <span>{{ this.currentTask.department ? this.currentTask.department : 'Не принадлежит к отделу' }}</span>
                         </q-item-label>
                     </q-item-section>
                 </q-item>
@@ -75,7 +75,7 @@
                         <q-item-label overline>Ответственное лицо:</q-item-label>
                         <q-item-label>
                             <span>
-                                {{ this.currentTask.master ? this.currentTask.master : 'Не выбрано' }}
+                                {{ this.currentTask.master ? this.currentTask.master.fullName : 'Не выбрано' }}
                             </span>
                         </q-item-label>
                     </q-item-section>
@@ -182,6 +182,7 @@
     import { mapGetters } from 'vuex'
     import { date } from 'quasar'
     import { getTaskStatusColor } from 'src/functions/getTaskStatusColor.js'
+    import { translater } from 'src/functions/translater.js'
 
     export default {
         name: "TaskInfo",
@@ -202,17 +203,8 @@
         },
 
         methods: {
-
-            onReset() {
-                console.log('reset')
-            },
-
-            onSubmit() {
-                console.log('submit')
-            },
-
-            onToggleChange() {
-                console.log('change')
+            translate(str) {
+               return translater(str)
             },
 
             setTaskStatusColor(status) {

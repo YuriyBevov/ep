@@ -17,7 +17,7 @@
         </div>          
 
         <div class="selection__content flex items-center q-mb-lg">
-            <div  class="q-mr-lg">
+            <div  class="q-mr-lg" v-if="this.filteredUserList.length">
                 <div
                     v-for="(user, i) of filteredUserList"
                     :key="'user_' + i"
@@ -26,6 +26,10 @@
                 >
                     <span class="q-mr-auto">{{user.fullName}}</span>
                 </div>
+            </div>
+
+            <div v-else>
+                <span>Никого нет...</span>
             </div>
 
             <div class="flex column">
@@ -64,7 +68,7 @@
                         v-if="$props.type === 'department_create'"
                         v-model="member.isHead"
                         style="width: 80px;"
-                        
+                        @input="checkMemberRole(member)"
                     >
                         <q-badge outline color="orange" label="Нач." />
                     </q-checkbox>
@@ -135,7 +139,8 @@
 
         methods: {
             checkMemberRole(member) {
-                if(!member.isMember && member.isHead || member.isPerformer || member.isMaster) {
+                if(member.isHead || member.isPerformer || member.isMaster) {
+                    console.log(member.isHead, member.isMaster)
                     member.isMember = true
                 }
             },

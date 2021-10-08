@@ -20,6 +20,8 @@ module.exports = function fillUserData(user) {
 
     getUsers()*/
 
+    //данная функуия проводит фильтрацию данных пользователя и возвращает только нужные для отправки на клиента
+
     return {
         _id: user._id,
         ordinalNumber: user.ordinalNumber,

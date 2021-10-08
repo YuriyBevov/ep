@@ -1,73 +1,5 @@
-// import { axiosInstance } from 'src/boot/axios'
-
 import { axiosInstance } from "src/boot/axios"
-
-const departments = [
-   {
-        id: '1',
-        title: 'Производство',
-
-        masters: [
-            {
-                id: '1'
-            }
-        ],
-
-        members: [
-            {
-                id: '1'
-            },
-
-            {
-                id: '2'
-            },
-
-            {
-                id: '3'
-            }
-        ]
-
-   },
-
-   {
-    id: '2',
-    title: 'Офис',
-    masters: [
-        {
-            id: '1'
-        },
-
-        {
-            id: '2'
-        }
-    ],
-    members: [
-
-        {
-            id: '2'
-        },
-
-        {
-            id: '3'
-        }
-    ]
-   },
-
-   {
-    id: '3',
-    title: 'Менеджер',
-    masters: [
-        {
-            id: '3'
-        }
-    ],
-    members: [
-        {
-            id: '3'
-        }
-    ]
-   },
-]
+import { fillData } from 'src/functions/fillData'
 
 const state = {
     departmentList: [],
@@ -80,38 +12,36 @@ const mutations = {
 }
 
 const actions = {
-    GET_DEPARTMENTS_LIST({commit}) {
-        commit('SET_DEPARTMENTS_LIST', departments)
+    GET_DEPARTMENT_LIST({commit}) {
+        axiosInstance.get('departments/get_departments')
+        .then((departments) => {
+            console.log('getDepartmentList')
+            commit('SET_DEPARTMENTS_LIST', departments.data)
+        })
+        .catch(err => console.log(err))
     },
 
-    CREATE_DEPARTMENT({commit}, department) {
-        console.log('department', department)
-        
-        /*axiosInstance.post('department/create_department', department)
+    CREATE_DEPARTMENT({commit, dispatch}, department) {
+        axiosInstance.post('departments/create_department', department)
         .then((resp) => {
-            console.log(resp.data)
+            dispatch('GET_DEPARTMENT_LIST')
         })
-        .catch(err => console.log(err))*/
+        .catch(err => console.log(err))
     }
 }
 
 const getters = {
-    departmentList: (state, {}, rootGetters)  => {
-
-        function fillData(resArr, entList, objKey) {
-            resArr.forEach(resArrItem => {
-                entList.forEach(entListItem => {
-                    resArrItem.id === entListItem.id ?
-                    resArrItem[objKey] = entListItem[objKey] : null
-                })
-            })
-        }
-
+    departmentList: (state, {}, rootGetters)  => {   
         let users = rootGetters.user.userList
-
+        let tasks = rootGetters.task.taskList
+        
         state.departmentList.forEach(dep => {
-            fillData(dep.members, users, 'fullName')
-            fillData(dep.masters, users, 'fullName')
+            dep.members ?
+            fillData(dep.members, users, 'fullName') : null
+            dep.heads ?
+            fillData(dep.heads, users, 'fullName') : null
+            dep.tasks ?
+            fillData(dep.tasks, tasks, 'title') : null
         })
 
         return state.departmentList

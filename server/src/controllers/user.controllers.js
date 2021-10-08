@@ -41,6 +41,7 @@ class userControllers {
                     const userData = new UserModel(data);
             
                     userData.save();
+                    //!!
             
                     return res.status(200).json({
                         message: 'Пользователь был успешно зарегистрирован !'
@@ -85,11 +86,13 @@ class userControllers {
                     const token = generateAccessToken ({
                       id: user._id
                     })
+
+                    let userData = fillUserData(user)
       
                     // отправляю токен и ответ сервера на клиент
                     return res.status(200).json({
                       token: `Bearer ${token}`,
-                      user: fillUserData(user),
+                      user: userData,
                       message: "Вы успешно вошли в систему"
                     })
                   }
@@ -125,9 +128,7 @@ class userControllers {
                 data.push(fillUserData(user))
               })
 
-              return res.status(200).json(
-                  data
-              )
+              return res.status(200).json(data)
             })
             .catch(err => {
                 return res.status(400).json({

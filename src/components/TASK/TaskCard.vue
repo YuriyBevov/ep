@@ -12,7 +12,7 @@
                     :class="setTaskStatusColor(this.$props.taskData.status)"
                     class="q-mr-lg"
                 >
-                    {{ this.$props.taskData.statusDesc }}
+                    {{ translate(this.$props.taskData.status) }}
                 </span>
 
                 <span class="text-orange-4 q-mr-lg">Приоритет: {{this.$props.taskData.priority}}</span>
@@ -32,7 +32,7 @@
                 <span
                     :class="setTaskStatusColor(this.$props.taskData.status)"
                 >
-                    {{ this.$props.taskData.statusDesc }}
+                    {{ translate(this.$props.taskData.status) }}
                 </span>
             </div>
 
@@ -79,20 +79,20 @@
                 <q-card-section class="text-subtitle2">
 
                     <!--Кем создано-->
-                    <div class="text-overline text-grey">
-                        Создатель:  {{this.$props.taskData.createdBy.fullName}}
+                    <div class="text-overline">
+                        <span class="text-grey">Создатель:</span> {{this.$props.taskData.createdBy.fullName}}
                     </div>
 
                     <!--Когда создано-->
-                    <div class="text-overline text-grey">
-                        <span>Дата создания: </span>
+                    <div class="text-overline">
+                        <span class="text-grey">Дата создания: </span>
                         <span>  {{setDate(this.$props.taskData.created)}}</span>
                     </div>
 
                     <!-- ВСЕ участники задачи -->
-                    <div class="text-overline text-grey" >
-                        Участники:
-                        <ul class="cmn__list" v-if="this.$props.taskData.members">
+                    <div class="text-overline" >
+                        <div><span class="text-grey">Участники:</span></div>
+                        <ul class="cmn__list q-pl-none" v-if="this.$props.taskData.members">
                             <li
                                 v-for="(member, i) of this.$props.taskData.members"
                                 :key="'member_' + i"
@@ -104,12 +104,13 @@
                     </div>
 
                     <!-- Исполнители задачи -->
-                    <div class="text-overline text-grey" >
-                        Исполнители:
-                        <ul class="cmn__list" v-if="this.$props.taskData.performers">
+                    <div class="text-overline" >
+                        <div><span class="text-grey">Исполнители:</span> </div>
+                        <ul class="cmn__list q-pl-none" v-if="this.$props.taskData.performers">
                             <li
                                 v-for="(performer, i) of this.$props.taskData.performers"
                                 :key="'performer_' + i"
+                                class="q-pl-none"
                             >
                                 {{performer.fullName}}
                             </li>
@@ -118,16 +119,16 @@
                     </div>
 
                     <!-- Отв лицо задачи -->
-                    <div class="text-overline text-grey">
-                        Ответственное лицо:
-                        <span class="q-pl-xl" v-if="this.$props.taskData.master">{{this.$props.taskData.master.fullName}}</span>
+                    <div class="text-overline">
+                        <div><span class="text-grey">Ответственное лицо:</span></div>
+                        <span v-if="this.$props.taskData.master">{{this.$props.taskData.master.fullName}}</span>
                         <span v-else>Не выбрано</span>
                     </div>
 
                     <!-- Подзадачи -->
-                    <div class="text-overline text-grey">
-                        Подзадачи:
-                        <ul class="cmn__list" v-if="this.$props.taskData.subtasks.length">
+                    <div class="text-overline">
+                        <div><span class="text-grey">Подзадачи:</span></div> 
+                        <ul class="cmn__list q-pl-none" v-if="this.$props.taskData.subtasks.length">
                             <li
                                 v-for="(subtask, i) of this.$props.taskData.subtasks"
                                 :key="'subtask_' + i"
@@ -146,6 +147,7 @@
 
 <script>
     import { getTaskStatusColor } from 'src/functions/getTaskStatusColor.js'
+    import { translater } from 'src/functions/translater.js'
     import { date } from 'quasar'
 
     export default {
@@ -163,8 +165,11 @@
         },
 
         methods: {
+            translate(str) {
+                return translater(str)
+            },
+
             setTaskStatusColor(status) {
-                console.log('setTaskStatusColor')
                 return getTaskStatusColor(status)
             },
 
@@ -175,11 +180,7 @@
             onClickOpenTaskInfo(id) {
                 this.$router.push('task/' + id)
             }
-        },
-
-        /*mounted() {
-            let formattedString = date.formatDate(this.$props.taskData.created, 'DD.MM.YY HH:mm')
-        }*/
+        }
     }
 </script>
 

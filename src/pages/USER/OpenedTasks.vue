@@ -27,15 +27,9 @@
                 />
             </div>
 
-            <div>
-                <!-- компонент реверсивной кнопки -->
-                <!-- <ReverseBtn
-                    :reverseStatus="isReversed"
-                    @reverse="reverse"
-                />-->
-
+            <!-- <div>
                 <q-btn @click="reverse" icon="height"/>
-            </div>
+            </div> -->
         </div>
 
         <q-list class="flex q-mb-xl" :style="!this.cardView ? 'flex-direction: column;' : null" v-if="filteredTasks.length">
@@ -107,7 +101,7 @@
             ...mapGetters('task', ['openedTasks', 'taskList', 'activeUserTasks']),
 
             filteredTasks() {
-                let filteredData = this.openedTasks
+                let filteredData = [...this.openedTasks]
 
                 if(this.searchingText) {
                     filteredData = searching(filteredData, this.searchingText, 'title')
@@ -130,10 +124,6 @@
         methods: {
             onClickOpenTask(id) {
                 this.$router.push('task/' + id)
-            },
-            reverse() {
-                //this.isReverseBtnClicked = true
-                console.log('reverse')
             }
         },
     }

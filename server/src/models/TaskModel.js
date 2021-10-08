@@ -12,10 +12,8 @@ const TaskSchema = new Schema({
     expDate: { type: Date },
     created: { type: Date, required: true},
     createdBy: { type: Object, required: true },
-    subtasks: { type: Array }
-
-    // поля , которые будут добавляться из других моделей , перед отправкой на клиент
-    // department, 
+    subtasks: { type: Array },
+    department: { type: String }
 }, {
   collection: 'tasks'
 })

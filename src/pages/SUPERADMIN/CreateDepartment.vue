@@ -130,6 +130,7 @@
             onReset() {
                 this.title = null
                 this.submit = false
+                this.memberList = []
             }
         }
     }

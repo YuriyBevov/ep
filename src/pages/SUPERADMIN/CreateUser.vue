@@ -90,7 +90,7 @@
             <q-select 
                 filled 
                 v-model="department" 
-                :options="['Производство']" 
+                :options="getDepartments()" 
                 label="Отдел: *"
                 lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
@@ -138,11 +138,22 @@
         },
 
         computed: {
-            ...mapGetters('user', ['currentOrdinalNumber'])
+            ...mapGetters('user', ['currentOrdinalNumber']),
+            ...mapGetters('department', ['departmentList'])
         },
 
         methods: {
             ...mapActions('user', ['CREATE_USER']),
+
+            getDepartments() {
+                let deps = []
+
+                this.departmentList.forEach(dep => {
+                    deps.push(dep.title)                    
+                })
+
+                return deps
+            },
 
             onSubmit() {
                 let roles = setUserRoles(this.roles)

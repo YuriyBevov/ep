@@ -1,4 +1,4 @@
-const { TaskModel, UserModel } = require('../models/index.js');
+const { TaskModel } = require('../models/index.js');
 
 class taskControllers {
     async addTask(req, res) {
@@ -6,8 +6,8 @@ class taskControllers {
             const { title, master, members } = req.body
 
             await TaskModel.findOne({title})
-            .then((isExist) => {
-                if(isExist) {
+            .then((task) => {
+                if(task) {
                     return res.status(400).json({
                         message: 'Задача с таким именем уже существует !'
                     })
@@ -45,14 +45,7 @@ class taskControllers {
         try {
             await TaskModel.find({})
             .then((tasks) => {
-                /*tasks.forEach(task => {
-                    task.status =   task.status === 'isOpened' ? 'Открытая задача' :
-                                    task.status === 'inWork'   ? 'В работе'        :
-                                    task.status === 'isFrozen' ? 'Приостановлена'  :
-                                    task.status === 'isDone'   ? 'Выполнена'       :
-                                    task.status === 'isClosed' ? 'Закрыта'         : null
-                }) */
-                return res.status(200).json(tasks)
+                 return res.status(200).json(tasks)
             })
             .catch(err => {
                 return res.status(400).json({

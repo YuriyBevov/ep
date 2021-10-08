@@ -35,15 +35,9 @@
                 />
             </div>
 
-            <div>
-                <!-- компонент реверсивной кнопки -->
-                <!-- <ReverseBtn
-                    :reverseStatus="isReversed"
-                    @reverse="reverse"
-                />-->
-
+            <!-- <div>
                 <q-btn @click="reverse" icon="height"/>
-            </div>
+            </div> -->
         </div>
 
         <q-list class="flex q-mb-xl" :style="!this.cardView ? 'flex-direction: column;' : null" v-if="filteredTasks.length">
@@ -89,6 +83,7 @@
     import { searching } from 'src/functions/searching.js'
     import { sorting } from 'src/functions/sorting.js'
     import { filtration } from 'src/functions/filtration.js'
+    import { translater } from 'src/functions/translater.js'
 
     export default {
         name: "OpenedTasksPage",
@@ -110,15 +105,16 @@
             ...mapGetters('task', ['openedTasks', 'taskList', 'activeUserTasks']),
 
             filteredTasks() {
-                let filteredData = this.openedTasks
+                let filteredData = [...this.taskList]
 
                 if(this.searchingText) {
                     filteredData = searching(filteredData, this.searchingText, 'title')
                 }
 
                 if(this.filterOption && this.filterOption !== 'Все') {
-                    let objKey = 'statusDesc'
-                    filteredData = filtration(filteredData, this.filterOption, 'statusDesc')
+                    let objKey = 'status'
+                    let option = translater(this.filterOption)
+                    filteredData = filtration(filteredData, option, objKey)
                 }
 
                 if(this.sortOption && this.sortOption !== 'Без сортировки') {
@@ -138,10 +134,6 @@
         methods: {
             onClickOpenTask(id) {
                 this.$router.push('task/' + id)
-            },
-            reverse() {
-                //this.isReverseBtnClicked = true
-                console.log('reverse')
             }
         },
     }

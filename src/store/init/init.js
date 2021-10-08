@@ -10,6 +10,7 @@ const actions = {
         dispatch('departments/GET_DEPARTMENTS', {}, {root: true}),*/
 
         dispatch('user/AUTHENTICATION', {}, {root: true})
+        dispatch('department/GET_DEPARTMENT_LIST', {}, {root: true}),
         dispatch('user/GET_USER_LIST', {}, {root: true}),
 
         axiosInstance.get('/init/init_app')
