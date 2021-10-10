@@ -1,4 +1,5 @@
-const { DepartmentModel } = require('../models/index.js');
+const { DepartmentModel, UserModel } = require('../models/index.js');
+const checkUserDepartment = require('../functions/checkUserDepartment');
 
 class departmentsControllers {
     async getAll(req, res) {
@@ -30,7 +31,7 @@ class departmentsControllers {
             const { title, heads, members } = req.body
 
             await DepartmentModel.findOne({title})
-            .then((department) => {
+            .then(async (department) => {
                 if(department) {
                     return res.status(400).json({
                         message: 'Отдел с таким именем уже существует !'
@@ -42,14 +43,12 @@ class departmentsControllers {
                         message: 'В отделе должен быть выбран руководитель !'
                     })
                 }
-                
-                else {
-                    new DepartmentModel(req.body).save();
-            
-                    return res.status(200).json({
-                        message: 'Отдел был успешно создан !'
-                    })
-                }
+
+                new DepartmentModel(req.body).save();
+        
+                return res.status(200).json({
+                    message: 'Отдел был успешно создан !'
+                })
             })
             .catch(err => {
                 return res.status(400).json({

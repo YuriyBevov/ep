@@ -86,7 +86,6 @@
                 ]"
             />
 
-            <!--Брать динамически !-->
             <q-select 
                 filled 
                 v-model="department" 
@@ -95,6 +94,7 @@
                 lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
             />
+
             <!--Брать динамически !-->
             <q-select 
                 filled 
@@ -130,7 +130,7 @@
                 confirmPassword: '000000',
                 name: 'Юрий',
                 surname: 'Бевов',
-                department: '',
+                department: 'Без отдела',
                 email: 'test',
                 phone: '123456789',
                 roles: []
@@ -152,7 +152,7 @@
                     deps.push(dep.title)                    
                 })
 
-                return deps
+                return ['Без отдела', ...deps]
             },
 
             onSubmit() {

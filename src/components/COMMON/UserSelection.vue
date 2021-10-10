@@ -1,19 +1,18 @@
 <template>
     <div class="selection">
         <div class="selection__header q-mb-lg flex">
-            
-            <div>
+            <div class="q-mr-sm">
                 <SearchInput 
                     :arr="this.$props.users"
                     @search="setSearchField"
                 />
             </div>
-            <!-- <div class="q-ma-sm">
+            <div>
                 <FilterSelect 
                     :filterOptions="concatOptions()"
                     @filterOption="setFilterOpt"
                 />
-            </div> -->
+            </div>
         </div>          
 
         <div class="selection__content flex items-center q-mb-lg">
@@ -24,7 +23,7 @@
                     style="width: 100%; max-width: 500px; height: 40px;"
                     class="flex items-center"
                 >
-                    <span class="q-mr-auto">{{user.fullName}}</span>
+                    <span class="q-mr-auto">{{user.fullName}}({{ user.department }})</span>
                 </div>
             </div>
 
@@ -103,7 +102,12 @@
                         <q-badge outline color="secondary" label="Уч-к" />
                     </q-checkbox>
                 </div>
+
             </div>
+        </div>
+        
+        <div>
+            <span v-if="this.$props.type === 'department_create'" class="text-italic" style="color: #C10015;"> * Если пользователь уже состоит в каком-либо отделе, он покидает его, при условии, что не является единственным руководителем прежнего отдела !</span> 
         </div>
 
         <!-- emit в родителя данных о выбранных пользователях --> 
@@ -112,15 +116,16 @@
 </template>
 
 <script>
-    /*import { filterSelectMixin } from 'src/mixins/filterSelectMixin.js'
-    import { filtration } from 'src/functions/filtration.js'*/
+    import { filterSelectMixin } from 'src/mixins/filterSelectMixin.js'
+    import { filtration } from 'src/functions/filtration.js'
     import { searchInputMixin } from 'src/mixins/searchInputMixin.js'
     import { searching } from 'src/functions/searching.js'
+    import { getUniqueArrayItems } from 'src/functions/getUniqueArrayItems.js'
 
     export default {
         name: "UserSelection",
 
-        mixins: [searchInputMixin/*, filterSelectMixin*/],
+        mixins: [searchInputMixin, filterSelectMixin],
 
         props: {
             users: { type: Array },
@@ -138,6 +143,16 @@
         },
 
         methods: {
+            concatOptions() {
+                let departments = []
+
+                this.$props.users.forEach(user => {
+                    departments.push(user.department)
+                })
+
+                return ['Все', ...getUniqueArrayItems(departments)]
+            },
+
             checkMemberRole(member) {
                 if(member.isHead || member.isPerformer || member.isMaster) {
                     console.log(member.isHead, member.isMaster)
@@ -199,7 +214,7 @@
 
             submit() {
                 let users = []
-                console.log(this.members)
+
                 this.members.forEach(member => {
                     member.isMember ?
                     users.push(member) : null
@@ -215,6 +230,15 @@
 
                 if(this.searchingText) {
                     filteredData = searching(filteredData, this.searchingText, 'fullName')
+                }
+
+                if(this.filterOption && this.filterOption !== 'Все') {
+                    let objKey = 'department'
+
+                    /*this.filterOption === 'Отдел не выбран' ?
+                    this.filterOption = null : null */
+                    let option = this.filterOption
+                    filteredData = filtration(filteredData, option, objKey)
                 }
                
                 return filteredData

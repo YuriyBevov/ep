@@ -156,7 +156,8 @@
                 let deps = []
 
                 this.departmentList.forEach(dep => {
-                    deps.push(dep.title)                    
+                    dep.members ?
+                    deps.push(dep.title) : null                    
                 })
 
                 return ['Без привязки к отделу', ...deps]

@@ -1,11 +1,14 @@
 const { UserModel, GroupModel, DepartmentModel } = require('../models/index.js');
 
+
+
 // кодировка пароля
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { SECRET_JWT_KEY } = require('../config/keys');
 
 const fillUserData = require('../functions/fillUserData');
+const setUserDepartment = require('../functions/setUserDepartment');
 
 // функция создания jwt-токена
 const generateAccessToken = (payload) => {
@@ -121,18 +124,24 @@ class userControllers {
     async getAll(req, res) {
         try {
             await UserModel.find({})
-            .then((users) => {
-              let data = []
+            .then(async (users) => {
 
-              users.forEach(user => {
-                data.push(fillUserData(user))
-              })
+                /*await DepartmentModel.find({})
+                .then( departments => {
+                    setUserDepartment(departments, users)
+                })*/
 
-              return res.status(200).json(data)
+                let data = []
+    
+                users.forEach(user => {
+                  data.push(fillUserData(user))
+                })
+  
+                return res.status(200).json(data)
             })
             .catch(err => {
                 return res.status(400).json({
-                    message: 'Не удалось получить списко пользователей... Попробуйте перезагрузить страницу !'
+                    message: 'Не удалось получить список пользователей... Попробуйте перезагрузить страницу !'
                 })
             })
         }

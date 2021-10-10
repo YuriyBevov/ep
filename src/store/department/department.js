@@ -27,11 +27,11 @@ const actions = {
         .then((resp) => {
             dispatch('GET_DEPARTMENT_LIST')
             console.log('ok', resp)
-            //dispatch('common/SET_SERVER_ANSWER_MODAL', { message: resp.data.message, isOpened: true }, {root: true})
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: resp.data.message, isOpened: true }, {root: true})
         })
         .catch((err) => {
             console.log('err', err)
-            //dispatch('common/SET_SERVER_ANSWER_MODAL', { message: err.message, isOpened: true }, {root: true}) // не рабтает, нужно показывать сообщение
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: err.response.data.message, isOpened: true }, {root: true}) // не рабтает, нужно показывать сообщение
         })
         .finally(() => {
             dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
