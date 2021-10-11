@@ -40,11 +40,8 @@ class userControllers {
                     const hashPassword = bcrypt.hashSync(password, 7)
                     const data = req.body
                     data.password = hashPassword
-                    // упростить !!
-                    const userData = new UserModel(data);
-            
-                    userData.save();
-                    //!!
+
+                    new UserModel(data).save()
             
                     return res.status(200).json({
                         message: 'Пользователь был успешно зарегистрирован !'

@@ -1,6 +1,28 @@
 <template>
     <div class="">
-        {{this.departmentList}}
+        <q-list class="q-mb-xl">
+            <q-item
+                clickable 
+                v-ripple
+                v-for="(dep, i) of this.departmentList"
+                :key="'dep_i' + i"
+                bordered
+
+                @click="onClickShowDepartmentInfo(dep._id)"
+            >
+                <q-item-section>
+                    <q-item-label overline>{{dep.title}}</q-item-label>
+                </q-item-section>
+
+                <q-item-section side >
+                    <div class="flex items-center">
+                        <div class="q-mr-xs"><q-icon color="negative" name="person" size="xs"/>/{{dep.heads.length}}</div>
+                        <div class="q-mr-xs"><q-icon color="primary" name="person" size="xs"/>/{{dep.members.length}}</div>
+                        <div class="q-mr-xs"><q-icon color="warning" name="task" size="xs"/>/{{dep.tasks.length}}</div>
+                    </div>
+                </q-item-section>
+            </q-item>
+        </q-list>
     </div>
 </template>
 
@@ -9,6 +31,12 @@
 
     export default {
         name: 'DepartmentList',
+
+        methods: {
+            onClickShowDepartmentInfo(id) {
+                this.$router.push('department/' + id)
+            }
+        },
 
         computed: {
             ...mapGetters('department', ['departmentList']),

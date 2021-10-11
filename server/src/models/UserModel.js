@@ -12,7 +12,6 @@ const UserSchema = new Schema({
     created: { type: Date, required: true},
     department: { type: String, default: null },
     isDepartmentHead: { type: Boolean, default: false },
-    isDepMaster: { type: Boolean},
     roles: { type: Array, required: true },
     permits: { type: Array },
 

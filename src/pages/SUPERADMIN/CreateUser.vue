@@ -95,6 +95,13 @@
                 :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
             />
 
+            <q-checkbox
+                v-if="department !== 'Без отдела'"
+                filled
+                v-model="isDepartmentHead"
+                label="Назначить руководителем отдела"
+            />
+
             <!--Брать динамически !-->
             <q-select 
                 filled 
@@ -131,6 +138,7 @@
                 name: 'Юрий',
                 surname: 'Бевов',
                 department: 'Без отдела',
+                isDepartmentHead: false,
                 email: 'test',
                 phone: '123456789',
                 roles: []
@@ -147,7 +155,7 @@
 
             getDepartments() {
                 let deps = []
-
+                
                 this.departmentList.forEach(dep => {
                     deps.push(dep.title)                    
                 })
@@ -167,6 +175,7 @@
                     surname: this.surname,
                     fullName: this.name + ' ' + this.surname,
                     department: this.department,
+                    isDepartmentHead: this.isDepartmentHead,
                     email: this.email,
                     phone: this.phone,
                     roles,

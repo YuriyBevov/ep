@@ -31,7 +31,7 @@
                 :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
             />
 
-            <q-btn @click="isMemberSelectionOpened = !isMemberSelectionOpened">Выбрать состав отдела</q-btn>
+            <!-- <q-btn @click="isMemberSelectionOpened = !isMemberSelectionOpened">Выбрать состав отдела</q-btn>
 
             <q-dialog v-model="isMemberSelectionOpened" transition-show="fade" transition-hide="fade" full-width>
                 <q-card style="height: 50vh; " class="flex column no-wrap q-pa-lg" >
@@ -53,7 +53,7 @@
                     </q-item>
                 </q-list>
             </div>
-            <q-toggle v-model="submit" label="Поставьте галочку, если уверены в правильности введенных данных" />
+            <q-toggle v-model="submit" label="Поставьте галочку, если уверены в правильности введенных данных" /> -->
 
             <div>
                 <q-btn label="Submit" type="submit" color="primary"/>
@@ -99,7 +99,7 @@
             },
 
             onSubmit() {
-                if (this.submit !== true) {
+                /*if (this.submit !== true) {
                     this.$q.notify({
                         color: 'red-5',
                         textColor: 'white',
@@ -107,7 +107,7 @@
                         message: 'Вы должны подтвердить правильность введенных данных !'
                     })
                 } else {
-                    let heads = []
+                    дet heads = []
                     let members = []
 
                     this.memberList.forEach(member => {
@@ -124,7 +124,13 @@
                     })
 
                     this.onReset()
-                }
+                }*/
+
+                this.CREATE_DEPARTMENT({
+                    title: this.title
+                })
+
+                this.onReset()
             },
 
             onReset() {

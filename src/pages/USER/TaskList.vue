@@ -66,15 +66,14 @@
             :tasks="this.activeUserTasks.length ? this.activeUserTasks : []"
             @openTask="onClickOpenTask"
         />
-
     </div>
 </template>
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
 
-    import TaskCard from 'src/components/TASK/TaskCard'
-    import ShortTaskCard from 'src/components/TASK/ShortTaskCard'
+    import TaskCard from 'components/TASK/TaskCard'
+    import ShortTaskCard from 'components/TASK/ShortTaskCard'
 
     import { sortSelectMixin } from 'src/mixins/sortSelectMixin.js'
     import { filterSelectMixin } from 'src/mixins/filterSelectMixin.js'

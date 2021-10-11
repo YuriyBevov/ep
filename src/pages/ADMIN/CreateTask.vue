@@ -101,8 +101,8 @@
             <q-toggle v-model="submit" label="Поставьте галочку, если уверены в правильности введенных данных" />
 
             <div>
-                <q-btn label="Submit" type="submit" color="primary"/>
-                <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+                <q-btn label="Подтвердить" type="submit" color="primary"/>
+                <q-btn label="Отменить" type="reset" color="primary" flat class="q-ml-sm" />
             </div>
         </q-form>
 
