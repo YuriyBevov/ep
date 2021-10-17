@@ -84,11 +84,11 @@
     import { mapGetters, mapActions } from 'vuex'
     import TaskCard from 'src/components/TASK/TaskCard'
     import ShortTaskCard from 'src/components/TASK/ShortTaskCard'
-    import { sortSelectMixin } from 'src/mixins/sortSelectMixin.js'
     import { filterSelectMixin } from 'src/mixins/filterSelectMixin.js'
+    import { filtration } from 'src/functions/filtration.js'
     import { searchInputMixin } from 'src/mixins/searchInputMixin.js'
     import { searching } from 'src/functions/searching.js'
-    import { filtration } from 'src/functions/filtration.js'
+    import { sortSelectMixin } from 'src/mixins/sortSelectMixin.js'
     import { sorting } from 'src/functions/sorting.js'
     import { translater } from 'src/functions/translater.js'
 

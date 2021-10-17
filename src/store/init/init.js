@@ -4,6 +4,7 @@ const actions = {
     INIT_APP({ commit, dispatch }) {
         dispatch('common/CHANGE_LOADING_STATE', true, { root: true })
 
+        // не правильно, тк при загрузке еще не авторизованного пользователя пытается обратиться и забрать все другие данные !!!
         dispatch('user/AUTHENTICATION', {}, {root: true})
         dispatch('department/GET_DEPARTMENT_LIST', {}, {root: true}),
         dispatch('user/GET_USER_LIST', {}, {root: true}),

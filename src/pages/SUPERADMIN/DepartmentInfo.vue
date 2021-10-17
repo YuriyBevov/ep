@@ -104,7 +104,8 @@
             },
 
             setDepartmentInfo() {
-                this.currentDepartment = this.departmentList.find(dep => dep._id === this.$route.params.id)
+                this.departmentList ?
+                this.currentDepartment = this.departmentList.find(dep => dep._id === this.$route.params.id) : null
             },
 
             onClickOpenTask(id) {

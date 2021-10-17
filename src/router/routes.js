@@ -18,6 +18,7 @@ const routes = [
       { path: '/departments', component: () => import('pages/SUPERADMIN/DepartmentList.vue') },
       { path: '/create_department', component: () => import('pages/SUPERADMIN/CreateDepartment.vue') },
       { path: '/department/:id', component: () => import('pages/SUPERADMIN/DepartmentInfo.vue') },
+      { path: '/user/:id', component: () => import('pages/SUPERADMIN/UserInfo.vue') },
       // не защищенный (админ)
       { path: '/create_task', component: () => import('pages/ADMIN/CreateTask.vue') },
       

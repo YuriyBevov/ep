@@ -11,7 +11,8 @@ export function sorting(arr, method, objKey) {
         })
     }
 
-    if(method === 'fromBiggest') {
+    if(method === 'fromBiggest' || !method) {
+        console.log('sort', arr)
         if(temp.length) {
             let sorted = result.sort((a,b) => a[objKey] > b[objKey] ? -1 : 0)
             return [...sorted, ...temp]

@@ -16,9 +16,9 @@
 
                 <q-item-section side >
                     <div class="flex items-center">
-                        <div class="q-mr-xs"><q-icon color="negative" name="person" size="xs"/>/{{dep.heads.length}}</div>
-                        <div class="q-mr-xs"><q-icon color="primary" name="person" size="xs"/>/{{dep.members.length}}</div>
-                        <div class="q-mr-xs"><q-icon color="warning" name="task" size="xs"/>/{{dep.tasks.length}}</div>
+                        <div class="q-mr-xs"><q-icon color="warning" name="face" size="xs"/>/{{dep.heads.length}}</div>
+                        <div class="q-mr-xs"><q-icon color="positive" name="person" size="xs"/>/{{dep.members.length}}</div>
+                        <div class="q-mr-xs"><q-icon color="negative" name="task" size="xs"/>/{{dep.tasks.length}}</div>
                     </div>
                 </q-item-section>
             </q-item>
