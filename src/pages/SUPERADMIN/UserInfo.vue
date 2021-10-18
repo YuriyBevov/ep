@@ -1,88 +1,93 @@
 <template>
     <div class="user-info">
-        <div class="" v-if="this.userData">
-            <q-list bordered separator class="q-mb-md">
-                <q-item clickable v-ripple >
-                    <q-item-section>
-                    <q-item-label overline>Имя:</q-item-label>
-                    <q-item-label>{{this.userData.fullName}}</q-item-label>
-                    </q-item-section>
-                </q-item>
-
-                <q-item clickable v-ripple >
-                    <q-item-section>
-                    <q-item-label overline>Отдел:</q-item-label>
-                    <q-item-label>{{this.userData.department}}{{this.userData.isDepartmentHead === true ? '(РУК)' : null}}</q-item-label>
-                    </q-item-section>
-                </q-item>
-
-                <q-item clickable v-ripple >
-                    <q-item-section>
-                    <q-item-label overline>Роль(и):</q-item-label>
-                    <q-item-label>
-                        <span
-                            v-for="(role, i) of this.userData.roles"
-                            :key="'role_' + i"
-                        >
-                            {{role}}
-                        </span>
-                    </q-item-label>
-                    </q-item-section>
-                </q-item>
-
-                <q-item clickable v-ripple >
-                    <q-item-section>
-                    <q-item-label overline>Телефон:</q-item-label>
-                    <q-item-label >{{this.userData.phone}}</q-item-label>
-                    </q-item-section>
-                </q-item>
-
-                <q-item clickable v-ripple >
-                    <q-item-section>
-                    <q-item-label overline>E-mail:</q-item-label>
-                    <q-item-label >{{this.userData.email}}</q-item-label>
-                    </q-item-section>
-                </q-item>
-
-                <!-- добавить информацию о задачах  -->
-            </q-list>
-
-            <div>
-                <q-btn label="Редактировать пользователя" color="positive" class="q-mr-sm"/>
-                <q-btn label="Удалить пользователя" color="negative"/>
-            </div>
+        <div>
+            <q-card>
+                <q-tabs
+                    v-model="tab"
+                    dense
+                    class="text-grey"
+                    active-color="primary"
+                    indicator-color="primary"
+                    align="justify"
+                    narrow-indicator
+                >
+                    <q-tab name="options" label="Данные пользователя" />
+                    <q-tab name="tasks" label="Текущие задачи" />
+                    <q-tab name="permits" label="Разрешения" />
+                </q-tabs>
+        
+                <q-separator />
+    
+                <q-tab-panels v-model="tab" animated>
+                    <q-tab-panel name="options">
+                        <UserDataEdit
+                            :users="this.userList"
+                            :departments="this.departmentList"
+                            @updateUser="updateUserData"
+                            @deleteUser="deleteUser"
+                        />
+                    </q-tab-panel>
+            
+                    <q-tab-panel name="tasks">
+                        <!--компонент задач пользователя-->
+                        <UserTasksEdit
+                            
+                        />
+                    </q-tab-panel>
+            
+                    <q-tab-panel name="permits">
+                        <!--компонент разрешений пользователя-->
+                        <UserPermitsEdit
+                        
+                        />
+                    </q-tab-panel>
+                </q-tab-panels>
+            </q-card>
         </div>
     </div>
 </template>
 
 <script>
     import { mapActions, mapGetters } from 'vuex'
+    import { translater } from 'src/functions/translater'
+    import UserDataEdit from 'src/components/USER/UserDataEdit'
+    import UserPermitsEdit from 'src/components/USER/UserPermitsEdit'
+    import UserTasksEdit from 'src/components/USER/UserTasksEdit'
 
     export default {
         data() {
             return {
-                userData: {}
+                tab: 'options',
             }
+        },
+
+        components: {
+            UserDataEdit,
+            UserPermitsEdit,
+            UserTasksEdit
         },
 
         computed: {
             ...mapGetters('user', ['userList']),
+            ...mapGetters('department', ['departmentList'])
         },
 
         methods: {
-            setUserData() {
-                this.userList ?
-                this.userData = this.userList.find(user => user._id === this.$route.params.id) : null
-            }
-        },
+            updateUserData(userData) {
+                let data = Object.assign({}, userData)
+                let roles = []
+                
+                data.roles.forEach(role => {
+                    roles.push( translater(role) )
+                })
 
-        mounted() {
-            this.setUserData()
-        },
+                data.roles = roles
 
-        watch: {
-            userList: function() {
-                this.setUserData()
+                console.log('UPDATE:',data)
+            },
+
+            deleteUser(_id) {
+                console.log(_id)
             }
         }
     } 

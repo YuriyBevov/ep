@@ -38,4 +38,37 @@ export function translater(str) {
     if(str === 'Закрыта') {
         return 'isClosed'
     }
+
+    // РОЛИ
+
+    if(str === 'superadmin') {
+        return 'СуперАдмин'
+    }
+
+    if(str === 'СуперАдмин') {
+        return 'superadmin'
+    }
+
+    if(str === 'admin') {
+        return 'Админ'
+    }
+
+    if(str === 'Админ') {
+        return 'admin'
+    }
+
+    if(str === 'user') {
+        return 'Пользователь'
+    }
+    if(str === 'Пользователь') {
+        return 'user'
+    }
+
+    if(str === 'quest') {
+        return 'Гость'
+    }
+
+    if(str === 'Гость') {
+        return 'quest'
+    }
 }

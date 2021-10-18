@@ -5,7 +5,7 @@
         :style="this.$props.cardView ? 'width: 320px;' : 'width: 100%; display: flex; align-items: center;'"
         class="task-card"
     >
-        <q-card-section v-if="!this.$props.cardView" :style="!this.$props.cardView ? 'padding: 0; padding-left: 15px; flex-grow: 1;' : null">
+        <q-card-section v-show="!this.$props.cardView" :style="!this.$props.cardView ? 'padding: 0; padding-left: 15px; flex-grow: 1;' : null">
             <div class="flex items-center">
                 <span class="task-card__title task-card__title--full text-h6 q-mr-auto" >{{this.$props.taskData.title}}</span>
                 <span
@@ -23,7 +23,7 @@
             </div>
         </q-card-section>
 
-        <q-card-section v-if="this.$props.cardView">
+        <q-card-section v-show="this.$props.cardView">
             <!-- Проект задачи -->
             <div class="text-overline flex justify-between">
                 <span class="text-orange-9">
@@ -69,7 +69,7 @@
                 dense
                 :icon="isCardExpanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
                 @click="isCardExpanded = !isCardExpanded"
-                v-if="this.$props.cardView"
+                v-show="this.$props.cardView"
             />
         </q-card-actions>
 

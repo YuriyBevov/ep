@@ -1,5 +1,6 @@
 <template>
     <div class="">
+        {{this.departmentList}}
         <q-list class="q-mb-xl">
             <q-item
                 clickable 

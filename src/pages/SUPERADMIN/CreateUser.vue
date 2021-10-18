@@ -69,9 +69,7 @@
             <q-input
                 filled
                 v-model="email"
-                label="E-mail: *"
-                lazy-rules
-                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
+                label="E-mail:"
             />
 
             <q-input
@@ -96,7 +94,7 @@
             />
 
             <q-checkbox
-                v-if="department !== 'Без отдела'"
+                v-show="department !== 'Без отдела'"
                 filled
                 v-model="isDepartmentHead"
                 label="Назначить руководителем отдела"
@@ -164,6 +162,7 @@
             },
 
             onSubmit() {
+                // через ф-ю translate !!
                 let roles = setUserRoles(this.roles)
 
                 this.CREATE_USER({

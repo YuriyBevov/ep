@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex">
+        <div class="flex q-mb-sm">
             <div class="user-tasks__search q-mr-xl">
                 <!-- компонент поиска -->
                 <SearchInput 
