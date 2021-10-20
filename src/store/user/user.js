@@ -82,6 +82,15 @@ const actions = {
             commit('SET_USER_LIST', users.data)
         })
         .catch(err => console.log(err))
+    },
+
+    DELETE_USER({commit}, _id) {
+        console.log(_id)
+        axiosInstance.post('user/delete_user', _id)
+        .then((resp) => {
+            console.log('RESP:', resp)
+        })
+        .catch(err => console.log(err))
     }
 }
 

@@ -210,7 +210,7 @@
 
                 this.$emit('updateUser', this.userData)
             }
-        },
+        }, 
 
         mounted() {
             this.setUserData()

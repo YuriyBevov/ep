@@ -73,6 +73,8 @@
         },
 
         methods: {
+            ...mapActions('user', ['DELETE_USER']),
+
             updateUserData(userData) {
                 let data = Object.assign({}, userData)
                 let roles = []
@@ -88,6 +90,7 @@
 
             deleteUser(_id) {
                 console.log(_id)
+                this.DELETE_USER({_id})
             }
         }
     } 
