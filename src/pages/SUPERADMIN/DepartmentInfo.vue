@@ -101,23 +101,28 @@
             ...mapActions('department', ['DELETE_DEPARTMENT', 'UPDATE_DEPARTMENT']),
 
             fillMemberList(members) {
-                console.log(this.currentDepartment)
                 let memberList = []
-                let headList = []
 
-                console.log('members:', members)
                 members.forEach(member => {
-                    member.isHead ?
-                    headList.push(member._id): null
+                    if (member.isMember && member.isHead) {
+                        memberList.push({
+                            _id: member._id,
+                            isHead: true
+                        })
+                    }
 
-                    member.isMember ?
-                    memberList.push(member._id) : null
+                    else if (member.isMember) {
+                        memberList.push({
+                            _id: member._id,
+                            isHead: false
+                        })
+                    }
                 })
 
                 let departmentData = {
+                    _id: this.currentDepartment._id,
                     title: this.currentDepartment.title,
-                    memberList,
-                    headList
+                    memberList
                 }
 
                 this.UPDATE_DEPARTMENT(departmentData)

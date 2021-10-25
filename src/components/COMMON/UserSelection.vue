@@ -187,9 +187,9 @@
                     let isPerformer = false
 
                     if(this.$props.department) {
-                        member.department === this.$props.department ?
+                        member.department.title === this.$props.department ?
                         isMember = true : null
-                        member.department === this.$props.department && member.isDepartmentHead ?
+                        member.department.title === this.$props.department && member.department.isHead ?
                         isHead = true : null
                     }
 
