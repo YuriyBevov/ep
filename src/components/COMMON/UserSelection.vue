@@ -23,7 +23,7 @@
                     style="width: 100%; max-width: 500px; height: 40px;"
                     class="flex items-center"
                 >
-                    <span class="q-mr-auto">{{user.fullName}}({{ user.department }})</span>
+                    <span class="q-mr-auto">{{user.fullName}}({{ user.department.title }})</span>
                 </div>
             </div>
 
@@ -32,44 +32,18 @@
             </div>
 
             <div class="flex column">
-
-                <!--<div 
-                    style="width: 100%; max-width: 500px;"
-                    class="flex items-center justify-end"
-                >
-  
-                    <q-btn
-                        v-if="$props.type === 'task_create'"
-                        flat 
-                        @click="selectPerformersClicked = true, selectPerformers = !selectPerformers, includeAll(filteredUserList, 'isPerformer')"
-                        style="width: 40px; margin-right: 40px;"
-                    >
-                        <q-icon :name="!selectPerformers ? 'task_alt' : 'published_with_changes'" size="sm" :color="!selectPerformers ? 'positive' : 'negative'"/>
-                    </q-btn>
-
-
-                    <q-btn
-                        v-if="$props.type === 'task_create' || $props.type === 'department_create'"
-                        flat 
-                        @click="selectMembersClicked = true, selectMembers = !selectMembers, includeAll(filteredUserList, 'isMember')"
-                        style="width: 40px; margin-right: 40px;"
-                    >
-                        <q-icon :name="!selectMembers ? 'task_alt' : 'published_with_changes'" size="sm" :color="!selectMembers ? 'positive' : 'negative'"/>
-                    </q-btn>
-                </div> -->
-
                 <div
                     v-for="(member, i) of filteredMembersData"
                     :key="'member_' + i"
                 >
-                    <!-- при создании отдела -->
+                    <!-- при редактировании отдела -->
                     <q-checkbox
-                        v-if="$props.type === 'department_create'"
+                        v-if="$props.type === 'department_update'"
                         v-model="member.isHead"
                         style="width: 80px;"
                         @input="checkMemberRole(member)"
                     >
-                        <q-badge outline color="orange" label="Нач." />
+                        <q-badge outline color="orange" label="Рук." />
                     </q-checkbox>
                     
                     <!-- при создании задачи -->
@@ -91,9 +65,9 @@
                         <q-badge outline color="secondary" label="Исп." />
                     </q-checkbox>
 
-                    <!-- при создании отдела и задачи  -->
+                    <!-- при создании задачи  -->
                     <q-checkbox
-                        v-if="$props.type === 'task_create' || $props.type === 'department_create'"
+                        v-if="$props.type === 'task_create' || $props.type === 'department_update'"
                         v-model="member.isMember"
                         style="width: 80px;"
                         @input="checkMemberRole(member)"
@@ -101,6 +75,15 @@
                     >
                         <q-badge outline color="secondary" label="Уч-к" />
                     </q-checkbox>
+
+                    <!-- <q-checkbox
+                        v-if="$props.type === 'department_update'"
+                        v-model="member.isMember"
+                        style="width: 80px;"
+                        :disable="member.isPerformer || member.isHead || member.isMaster ? true : false"
+                    >
+                        <q-badge outline color="secondary" label="Уч-к" />
+                    </q-checkbox> -->
                 </div>
 
             </div>
@@ -129,16 +112,13 @@
 
         props: {
             users: { type: Array },
-            type: { type: String }
+            type: { type: String },
+            department: { type: String }
         },
 
         data() {
             return {
-                members: [],
-                /*selectMembersClicked: false,
-                selectMembers:    false,
-                selectPerformersClicked: false,
-                selectPerformers: false,*/
+                members: []
             }
         },
 
@@ -159,49 +139,6 @@
                     member.isMember = true
                 }
             },
-
-            /*includeAll(users) {
-                    this.selectMembers === true && this.selectMembersClicked === true ?
-                    this.users.forEach(user => {
-                        this.members.find(member => {
-                            user._id === member._id ?
-                            member.isMember = true  : null
-                        })
-                    }) : 
-
-                    this.users.forEach(user => {
-                        this.members.find(member => {
-                            user._id === member._id ?
-                            member.isMember = false  : null
-                        })
-                    })
-
-                    console.log(this.selectMembersClicked)
-                    this.selectMembersClicked = false
-                    console.log(this.selectMembersClicked)
-
-                    this.selectPerformers === true && this.selectPerformersClicked === true?
-
-                    this.users.forEach(user => {
-                        this.members.find(member => {
-                            if(user._id === member._id) {
-                                member.isPerformer = true
-                                member.isMember = true
-                            }
-                        })
-                    }) : 
-
-                    this.users.forEach(user => {
-                        this.members.find(member => {
-                            if(user._id === member._id) {
-                                member.isPerformer = false
-                            }
-                        })
-                    })
-
-                    this.selectPerformersClicked = false
-
-            }, */
 
             checkIsUnique(user, param) {
                 let selected = this.members.find(member => member._id === user._id)
@@ -235,8 +172,6 @@
                 if(this.filterOption && this.filterOption !== 'Все') {
                     let objKey = 'department'
 
-                    /*this.filterOption === 'Отдел не выбран' ?
-                    this.filterOption = null : null */
                     let option = this.filterOption
                     filteredData = filtration(filteredData, option, objKey)
                 }
@@ -245,14 +180,26 @@
             },
 
             poolData() {
-                this.$props.users.forEach(member => {                  
+                this.$props.users.forEach(member => {
+                    let isMaster = false
+                    let isHead = false
+                    let isMember = false
+                    let isPerformer = false
+
+                    if(this.$props.department) {
+                        member.department === this.$props.department ?
+                        isMember = true : null
+                        member.department === this.$props.department && member.isDepartmentHead ?
+                        isHead = true : null
+                    }
+
                     this.members.push({
                         _id: member._id,
                         fullName: member.fullName,
-                        isMaster: false,
-                        isHead: false,
-                        isMember: false,
-                        isPerformer: false,
+                        isMaster,
+                        isHead,
+                        isMember,
+                        isPerformer,
                         // пополняемый набор, используется в зависимости от модуля из которого вызван
                     })
                 })

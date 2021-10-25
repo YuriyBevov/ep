@@ -17,11 +17,11 @@
                 </q-tabs>
         
                 <q-separator />
-    
+
                 <q-tab-panels v-model="tab" animated>
                     <q-tab-panel name="options">
                         <UserDataEdit
-                            :users="this.userList"
+                            :user="this.userList.find(user => user._id === this.$route.params.id)"
                             :departments="this.departmentList"
                             @updateUser="updateUserData"
                             @deleteUser="deleteUser"
@@ -31,7 +31,8 @@
                     <q-tab-panel name="tasks">
                         <!--компонент задач пользователя-->
                         <UserTasksEdit
-                            
+                            :tasks="this.taskList"
+                            :_id="this.$route.params.id"
                         />
                     </q-tab-panel>
             
@@ -58,6 +59,7 @@
         data() {
             return {
                 tab: 'options',
+                deleteRequest: false
             }
         },
 
@@ -69,27 +71,18 @@
 
         computed: {
             ...mapGetters('user', ['userList']),
-            ...mapGetters('department', ['departmentList'])
+            ...mapGetters('department', ['departmentList']),
+            ...mapGetters('task', ['taskList'])
         },
 
         methods: {
-            ...mapActions('user', ['DELETE_USER']),
+            ...mapActions('user', ['DELETE_USER', 'UPDATE_USER']),
 
             updateUserData(userData) {
-                let data = Object.assign({}, userData)
-                let roles = []
-                
-                data.roles.forEach(role => {
-                    roles.push( translater(role) )
-                })
-
-                data.roles = roles
-
-                console.log('UPDATE:',data)
+                this.UPDATE_USER(userData)
             },
 
             deleteUser(_id) {
-                console.log(_id)
                 this.DELETE_USER({_id})
             }
         }

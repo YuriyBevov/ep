@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div v-if="this.userData">
         <div class="flex items-center q-mb-lg">
             <div class="q-mr-lg">
                 <q-toggle
@@ -103,8 +103,8 @@
 
             <q-select
                 @input="setChangeState()"  
-                filled 
-                v-model="userData.department" 
+                filled
+                v-model="userData.department.title" 
                 hint="Отдел"
                 :options="getDepartments()"
                 :disable="this.isUserEditing ? false : true"
@@ -114,11 +114,11 @@
             />
 
             <q-checkbox
+                v-if="this.userData.department.title !== 'Без отдела'"
                 @input="setChangeState()"
-                v-show="userData.department !== 'Без отдела'"
                 :disable="this.isUserEditing ? false : true"
                 filled
-                v-model="userData.isDepartmentHead"
+                v-model="userData.department.isHead"
                 label="Руководитель отдела"
                 class="q-mb-md"
             />
@@ -148,7 +148,7 @@
 
     export default {
         props: {
-            users: { type: Array },
+            user: { type: Object },
             departments: { type: Array }
         },
 
@@ -157,18 +157,20 @@
                 isFieldsDirty: false,
                 isDataSaved: true,
                 isUserEditing: false,
-                userData: {},
+                userData: null,
             }
         },
 
         methods: {
             setUserData() {
-                if(this.$props.users.length) {
-                    this.userData = Object.assign({}, this.$props.users.find(user => user._id === this.$route.params.id))
+                if(this.$props.user) {
+                    // глубокая КОПИЯ объекта
+                    this.userData = JSON.parse(JSON.stringify(this.$props.user))
 
                     let roles = []
 
                     this.userData.roles.forEach(role => {
+                        console.log(role)
                         roles.push( translater(role) )
                     })
 
@@ -205,19 +207,31 @@
             },
 
             updateUser() {
-                this.userData.department === 'Без отдела' ?
-                this.userData.isDepartmentHead = false : null
+                let roles = []
+
+                this.userData.roles.forEach(role => {
+                    roles.push( translater(role) )
+                })
+
+                this.userData.roles = roles
+
+                if(this.userData.department.title === 'Без отдела') {
+                    this.userData.department._id = null
+                    this.userData.department.isHead = false
+                } else {
+                    this.userData.department._id = this.$props.departments.find(dep => dep.title === this.userData.department.title)._id
+                }
 
                 this.$emit('updateUser', this.userData)
             }
-        }, 
+        },
 
         mounted() {
             this.setUserData()
         },
 
         watch: {
-            users: function() {
+            user: function() {
                 this.setUserData()
             }
         }

@@ -146,7 +146,7 @@
 
             filteredUserList() {
                 if(this.department !== 'Без привязки к отделу') {
-                    return this.userList.filter(user => user.department === this.department)
+                    return this.userList.filter(user => user.department.title === this.department)
                 }
 
                 return this.userList
@@ -154,9 +154,9 @@
 
             getDepartments() {
                 let deps = []
-
+                
                 this.departmentList.forEach(dep => {
-                    dep.members ?
+                    dep.heads.length ?
                     deps.push(dep.title) : null                    
                 })
 

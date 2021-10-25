@@ -14,8 +14,8 @@ const axiosInstance = axios.create({
     return qs.stringify(params, { arrayFormat: 'repeat' })
   },
 
-  //baseURL: 'http://5.23.54.158/'
-  baseURL: 'http://127.0.0.1:3000'
+  baseURL: 'http://5.23.54.158/'
+  //baseURL: 'http://127.0.0.1:3000'
 })
 
 const setErrorInterceptor = (errorFunction) => {

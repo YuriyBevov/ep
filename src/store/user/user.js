@@ -17,16 +17,22 @@ const mutations = {
 
 const actions = {
     LOGIN({commit, dispatch}, user) {
+        dispatch('common/CHANGE_LOADING_STATE', true, { root: true })
+
         axiosInstance.post('user/login', user)
         .then((resp) => {
             localStorage.setItem('token', resp.data.token)
-            dispatch('GET_USER_LIST')
+            console.log('login')
+            dispatch('init/INIT_APP', true, { root: true })
             commit('SET_ACTIVE_USER', resp.data.user)
         })
         .then((resp) => {
             this.$router.push('/')
         })
         .catch(err => console.log(err))
+        .finally(() => {
+            dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
+        })
     },
 
     LOGOUT({commit}) {
@@ -38,20 +44,22 @@ const actions = {
     },
 
     AUTHENTICATION({ commit, dispatch }) {
-
         axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('token')
 
         axiosInstance.get('/auth/auth')
         .then((resp) => {
             console.log('auth ok')
-            // dispatch('GET_USER_LIST')
             commit('SET_ACTIVE_USER', resp.data.user)
             dispatch('REFRESH_TOKEN', resp.data.token)
+            dispatch('init/INIT_APP', true, { root: true })
         })
         .catch((err) => {
             console.log('auth not')
             localStorage.removeItem('token')
             this.$router.push('/login')
+        })
+        .finally(() => {
+            dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
         })
     },
 
@@ -68,10 +76,15 @@ const actions = {
 
         axiosInstance.post('user/add_user', user)
         .then((resp) => {
-            dispatch('GET_USER_LIST')
+            this.$router.push('/users')
+            dispatch('init/INIT_APP', true, { root: true })
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: resp.data.message, isOpened: true }, {root: true})
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: err.response.data.message, isOpened: true }, {root: true})
+        })
         .finally(() => {
+            
             dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
         })
     },
@@ -84,13 +97,39 @@ const actions = {
         .catch(err => console.log(err))
     },
 
-    DELETE_USER({commit}, _id) {
-        console.log(_id)
+    UPDATE_USER({commit, dispatch}, userData) {
+        console.log(userData)
+
+        dispatch('common/CHANGE_LOADING_STATE', true, { root: true })
+
+        axiosInstance.post('user/update_user', userData)
+        .then((resp) => {
+            dispatch('init/INIT_APP', true, { root: true })
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: resp.data.message, isOpened: true }, {root: true})
+        })
+        .catch(err => {
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: err.response.data.message, isOpened: true }, {root: true})
+        })
+        .finally(() => {
+            dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
+        })
+    },
+
+    DELETE_USER({commit, dispatch}, _id) {
+        dispatch('common/CHANGE_LOADING_STATE', true, { root: true })
+
         axiosInstance.post('user/delete_user', _id)
         .then((resp) => {
-            console.log('RESP:', resp)
+            this.$router.push('/users')
+            dispatch('init/INIT_APP', true, { root: true })
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: resp.data.message, isOpened: true }, {root: true})
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: err.response.data.message, isOpened: true }, {root: true})
+        })
+        .finally(() => {
+            dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
+        })
     }
 }
 

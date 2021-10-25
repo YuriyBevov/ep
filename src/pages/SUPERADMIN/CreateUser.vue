@@ -86,7 +86,7 @@
 
             <q-select 
                 filled 
-                v-model="department" 
+                v-model="department.title" 
                 :options="getDepartments()" 
                 label="Отдел: *"
                 lazy-rules
@@ -94,9 +94,9 @@
             />
 
             <q-checkbox
-                v-show="department !== 'Без отдела'"
+                v-show="department.title !== 'Без отдела'"
                 filled
-                v-model="isDepartmentHead"
+                v-model="department.isHead"
                 label="Назначить руководителем отдела"
             />
 
@@ -135,8 +135,12 @@
                 confirmPassword: '000000',
                 name: 'Юрий',
                 surname: 'Бевов',
-                department: 'Без отдела',
-                isDepartmentHead: false,
+                /*department: 'Без отдела',
+                isDepartmentHead: false,*/
+                department: {
+                    title: 'Без отдела',
+                    isHead: false
+                },
                 email: 'test',
                 phone: '123456789',
                 roles: []
@@ -153,7 +157,7 @@
 
             getDepartments() {
                 let deps = []
-                
+                console.log(this.departmentList)
                 this.departmentList.forEach(dep => {
                     deps.push(dep.title)                    
                 })
@@ -162,8 +166,17 @@
             },
 
             onSubmit() {
-                // через ф-ю translate !!
                 let roles = setUserRoles(this.roles)
+
+                let departmentID = ''
+                
+                this.departmentList.find(dep => {
+                    if(dep.title === this.department.title) {
+                        departmentID = dep._id
+                    }
+                } )
+
+                console.log('ID', departmentID)
 
                 this.CREATE_USER({
                     ordinalNumber: this.currentOrdinalNumber,
@@ -172,9 +185,11 @@
                     confirmPassword: this.confirmPassword,
                     name: this.name,
                     surname: this.surname,
-                    fullName: this.name + ' ' + this.surname,
-                    department: this.department,
-                    isDepartmentHead: this.isDepartmentHead,
+                    department: {
+                        _id: departmentID,
+                        title: this.department.title,
+                        isHead: this.department.isHead
+                    },
                     email: this.email,
                     phone: this.phone,
                     roles,

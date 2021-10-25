@@ -25,15 +25,48 @@ const actions = {
 
         axiosInstance.post('departments/create_department', department)
         .then((resp) => {
-            dispatch('GET_DEPARTMENT_LIST')
-            console.log('ok', resp)
+            dispatch('init/INIT_APP', true, { root: true })
             dispatch('common/SET_SERVER_ANSWER_MODAL', { message: resp.data.message, isOpened: true }, {root: true})
         })
         .catch((err) => {
-            console.log('err', err)
-            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: err.response.data.message, isOpened: true }, {root: true}) // не рабтает, нужно показывать сообщение
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: err.response.data.message, isOpened: true }, {root: true})
         })
         .finally(() => {
+            this.$router.push('/departments')
+            dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
+        })
+    },
+
+    UPDATE_DEPARTMENT({commit, dispatch}, departmentData) {
+        // console.log(departmentData)
+        dispatch('common/CHANGE_LOADING_STATE', true, { root: true })
+
+        axiosInstance.post('departments/update_department', departmentData)
+        .then((resp) => {
+            dispatch('init/INIT_APP', true, { root: true })
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: resp.data.message, isOpened: true }, {root: true})
+        })
+        .catch(err => {
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: err.response.data.message, isOpened: true }, {root: true})
+        })
+        .finally(() => {
+            dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
+        })
+    },
+
+    DELETE_DEPARTMENT({commit, dispatch}, _id) {
+        dispatch('common/CHANGE_LOADING_STATE', true, { root: true })
+
+        axiosInstance.post('departments/delete_department', _id)
+        .then((resp) => {
+            dispatch('init/INIT_APP', true, { root: true })
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: resp.data.message, isOpened: true }, {root: true})
+        })
+        .catch(err => {
+            dispatch('common/SET_SERVER_ANSWER_MODAL', { message: err.response.data.message, isOpened: true }, {root: true})
+        })
+        .finally(() => {
+            this.$router.push('/departments')
             dispatch('common/CHANGE_LOADING_STATE', false, { root: true })
         })
     }

@@ -1,7 +1,6 @@
 <template>
     <div class="">
-        {{this.departmentList}}
-        <q-list class="q-mb-xl">
+        <q-list class="q-mb-xl" v-if="this.departmentList.length">
             <q-item
                 clickable 
                 v-ripple
@@ -24,6 +23,11 @@
                 </q-item-section>
             </q-item>
         </q-list>
+        <div v-else>
+            <span>Отделов пока нет...</span>
+        </div>
+        
+        <router-link color="primary" to="/create_department">Создать новый отдел</router-link>
     </div>
 </template>
 

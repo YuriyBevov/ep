@@ -132,7 +132,7 @@
 
         methods: {
             onClickOpenTask(id) {
-                this.$router.push('task/' + id)
+                this.$router.push('/task/' + id)
             }
         },
     }

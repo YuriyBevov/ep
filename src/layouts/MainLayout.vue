@@ -39,7 +39,7 @@
 
           <!-- ИНТЕРФЕЙС ПОЛЬЗОВАТЕЛЯ -->
           
-          <div v-if="roles && roles.find(role => role === 'user')">
+          <div v-if="roles && roles.find(role => role !== 'quest')">
             <!--ЗАДАЧИ-->
 
             <q-item clickable v-ripple :to="'/'">
@@ -48,7 +48,7 @@
               </q-item-section>
 
               <q-item-section>
-                Мои задачи
+                Мои задачи({{this.activeUserTasks.length}})
               </q-item-section>
 
             </q-item>
@@ -59,7 +59,7 @@
               </q-item-section>
 
               <q-item-section>
-                Открытые задачи
+                Открытые задачи({{this.openedTasks.length}})
               </q-item-section>
             </q-item>
 
@@ -69,7 +69,7 @@
               </q-item-section>
 
               <q-item-section>
-                Список всех задач
+                Список всех задач({{this.taskList.length}})
               </q-item-section>
             </q-item>
 
@@ -79,7 +79,7 @@
               </q-item-section>
 
               <q-item-section>
-                Выполненные задачи
+                Выполненные задачи({{this.doneTasks.length}})
               </q-item-section>
             </q-item>
 
@@ -89,7 +89,7 @@
               </q-item-section>
 
               <q-item-section>
-                Архив задач
+                Архив задач({{this.closedTasks.length}})
               </q-item-section>
             </q-item>
 
@@ -97,7 +97,7 @@
 
           </div>
 
-          <div v-if="roles && roles.find(role => role === 'superadmin')">
+          <div v-if="roles && roles.find(role => role === 'admin') || roles && roles.find(role => role === 'superadmin') ">
             <q-item clickable v-ripple :to="'/create_task'">
               <q-item-section avatar>
                 <q-icon name="build" color="accent"/>
@@ -117,9 +117,8 @@
               <q-item-section avatar>
                 <q-icon name="home_work" color="negative"/>
               </q-item-section>
-
               <q-item-section>
-                Отделы
+                Отделы({{this.departmentList.length}})
               </q-item-section>
             </q-item>
 
@@ -139,7 +138,7 @@
               </q-item-section>
 
               <q-item-section>
-                Пользователи
+                Пользователи({{this.userList.length}})
               </q-item-section>
             </q-item>
 
@@ -171,36 +170,21 @@
       data() {
           return {
               drawer: false,
-
-              isUser: true,
           }
       },
 
       computed: {
-          ...mapGetters('user', ['activeUser', 'roles'])
+          ...mapGetters('user', ['userList', 'activeUser', 'roles']),
+          ...mapGetters('task', ['taskList', 'openedTasks', 'doneTasks', 'frozenTasks', 'activeUserTasks', 'closedTasks']),
+          ...mapGetters('department', ['departmentList'])
       },
 
       methods: {
           ...mapActions('user', ['LOGOUT']),
-          ...mapActions('task', ['GET_TASK_LIST']),
-          //...mapActions('project', ['GET_PROJECT_LIST']),
-          //...mapActions('department', ['GET_DEPARTMENTS_LIST']),
-
-
-          initAppData() {
-              //this.GET_DEPARTMENTS_LIST()
-              //this.GET_PROJECT_LIST()
-              this.GET_TASK_LIST()
-          },
           
           logout() {
-              console.log('logout')
               this.LOGOUT()
           }
       },
-
-      mounted() {
-          this.initAppData()
-      }
   }
 </script>

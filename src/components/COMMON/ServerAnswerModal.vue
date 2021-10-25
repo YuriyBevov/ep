@@ -15,6 +15,7 @@
                 />
             </q-card-actions>
         </q-card>
+
     </q-dialog>
 </template>
 
@@ -37,7 +38,6 @@
 
         methods: {
             ...mapActions('common', ['SET_SERVER_ANSWER_MODAL']),
-
             resetModalState() {
                 this.SET_SERVER_ANSWER_MODAL({
                     msg: '',

@@ -39,6 +39,7 @@
                     </q-item-section>
                 </q-item>
 
+                <!-- Не работает пока -->
                 <q-item clickable v-ripple >
                     <div>
                         <ShortTaskCard
@@ -53,29 +54,27 @@
             </q-list>
 
             <div>
-                <q-btn label="Редактировать состав" color="secondary" class="q-mr-md"/> 
+                <q-btn label="Редактировать состав" color="secondary" class="q-mr-md" @click="isMemberSelectionOpened = true"/> 
                 
-                <q-btn label="Удалить отдел" color="negative"/>
+                <q-btn label="Удалить отдел" color="negative" @click="deleteDepartment()"/>
             </div>
-            <!-- <q-btn @click="isMemberSelectionOpened = !isMemberSelectionOpened" label="Редактировать состав"/>
 
             <q-dialog v-model="isMemberSelectionOpened" transition-show="fade" transition-hide="fade" full-width>
-
                 <q-card style="height: 50vh; " class="flex column no-wrap q-pa-lg" >
-                    {{this.currentDepartment.members}}
                     <UserSelection
-                        :type="'task_create'"
-                        :users="this.currentDepartment.members"
+                        :type="'department_update'"
+                        :users="this.userList"
+                        :department="this.currentDepartment.title"
                         @memberList="fillMemberList"
                     />
                 </q-card>
-            </q-dialog> -->
+            </q-dialog>
         </div>
     </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
     import ShortTaskCard from 'components/TASK/ShortTaskCard'
     import UserSelection from 'components/COMMON/UserSelection'
 
@@ -90,17 +89,39 @@
             return {
                 currentDepartment: {},
                 isMemberSelectionOpened: false,
-                memberList: [],
             }
         },
 
         computed: {
             ...mapGetters('department', ['departmentList']),
+            ...mapGetters('user', ['userList'])
         },
 
         methods: {
+            ...mapActions('department', ['DELETE_DEPARTMENT', 'UPDATE_DEPARTMENT']),
+
             fillMemberList(members) {
-                console.log('fill', members)
+                console.log(this.currentDepartment)
+                let memberList = []
+                let headList = []
+
+                console.log('members:', members)
+                members.forEach(member => {
+                    member.isHead ?
+                    headList.push(member._id): null
+
+                    member.isMember ?
+                    memberList.push(member._id) : null
+                })
+
+                let departmentData = {
+                    title: this.currentDepartment.title,
+                    memberList,
+                    headList
+                }
+
+                this.UPDATE_DEPARTMENT(departmentData)
+                this.isMemberSelectionOpened = false
             },
 
             setDepartmentInfo() {
@@ -110,6 +131,10 @@
 
             onClickOpenTask(id) {
                 this.$router.push('/task/' + id)
+            },
+
+            deleteDepartment(_id, title) {
+                this.DELETE_DEPARTMENT(this.currentDepartment)
             }
         },
 

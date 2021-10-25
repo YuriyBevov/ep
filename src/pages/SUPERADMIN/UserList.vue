@@ -35,7 +35,7 @@
 
                 <q-item-section side >
                     <div class="flex items-center">
-                        <div class="q-mr-xs"><q-icon :color="user.isDepartmentHead ? 'warning' : 'positive'" :name="user.isDepartmentHead ? 'face' : 'person'" size="xs"/>/{{user.department}}</div>
+                        <div class="q-mr-xs"><q-icon :color="user.department.isHead ? 'warning' : 'positive'" :name="user.department.isHead ? 'face' : 'person'" size="xs"/>/{{user.department.title}}</div>
                     </div>
                 </q-item-section>
             </q-item>

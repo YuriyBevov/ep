@@ -1,27 +1,7 @@
 <template>
     <div class="task-info">
-        <!-- 
-
-            Подробная карточка задачи.
-
-            Функционал:
-            Подробное описание задачи + галерея +  чат
-
-            + модалка с редактированием задачи(если есть разрешение) =>
-
-           =>   Ред-е участников(доб/уд),
-                Смена отв.лица(доб/уд, текущее отв лицо не может удалить сам себя, если он один),
-                Ред-е исполнителей(доб/уд),
-                Смена статуса задачи
-                Чат задачи
-                Галерея задачи
-                Ред. кфф срочности ?? Должен ли вобще быть у задачи ?!
-                Список подзадач -> переход в 
-
-        -->
-
         <div class="task-info__part q-pa-sm" v-if="this.currentTask">
-            <q-list bordered separator>
+            <q-list bordered separator class="q-mb-lg">
                 <q-item clickable v-ripple >
                     <q-item-section>
                     <q-item-label overline>Группа проектов:</q-item-label>
@@ -35,7 +15,7 @@
                     <q-item-label>{{this.currentTask.title}} от {{setDate(this.currentTask.created)}}</q-item-label>
                 </q-item-section>
                 </q-item>
-
+{{this.currentTask}}
                 <q-item clickable v-ripple class="flex column">
                     <q-item-section>
                     <q-item-label overline>Описание задачи:</q-item-label>
@@ -57,7 +37,7 @@
                 <q-item clickable v-ripple class="flex column">
                     <q-item-section>
                     <q-item-label overline>Дата сдачи:</q-item-label>
-                    <q-item-label>{{setDate(this.currentTask.expDate)}}</q-item-label>
+                    <q-item-label >{{this.currentTask.expDate ? setDate(this.currentTask.expDate) : 'Без даты сдачи'}}</q-item-label>
                     </q-item-section>
                 </q-item>
 
@@ -115,6 +95,11 @@
                     </q-item-section>
                 </q-item>
             </q-list>
+
+            <div class="">
+                <q-btn color="positive" @click="updateTask(currentTask._id)" label="Редактировать" class="q-mr-sm"/>
+                <q-btn color="negative" @click="deleteTask(currentTask._id)" label="Удалить"/>
+            </div>
         </div>
 
         <div class="task-info__part q-pa-sm">
@@ -179,7 +164,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
     import { date } from 'quasar'
     import { getTaskStatusColor } from 'src/functions/getTaskStatusColor.js'
     import { translater } from 'src/functions/translater.js'
@@ -203,6 +188,7 @@
         },
 
         methods: {
+            ...mapActions('task', ['DELETE_TASK']),
             translate(str) {
                return translater(str)
             },
@@ -218,6 +204,14 @@
             setDate(timeStamp) {
                 return date.formatDate(timeStamp, 'DD.MM.YY HH:mm')
             },
+
+            updateTask(_id) {
+                console.log(_id)
+            },
+
+            deleteTask(_id) {
+                this.DELETE_TASK({_id})
+            }
         },
 
         mounted() {

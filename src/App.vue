@@ -26,10 +26,10 @@
       },
 
       methods: {
-        ...mapActions('init', ['INIT_APP']),
+        ...mapActions('user', ['AUTHENTICATION']),
 
         initApp() {
-          this.INIT_APP()
+          this.AUTHENTICATION()
         }
       },
 
