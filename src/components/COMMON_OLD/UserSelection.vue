@@ -75,17 +75,7 @@
                     >
                         <q-badge outline color="secondary" label="Уч-к" />
                     </q-checkbox>
-
-                    <!-- <q-checkbox
-                        v-if="$props.type === 'department_update'"
-                        v-model="member.isMember"
-                        style="width: 80px;"
-                        :disable="member.isPerformer || member.isHead || member.isMaster ? true : false"
-                    >
-                        <q-badge outline color="secondary" label="Уч-к" />
-                    </q-checkbox> -->
                 </div>
-
             </div>
         </div>
         
@@ -127,7 +117,7 @@
                 let departments = []
 
                 this.$props.users.forEach(user => {
-                    departments.push(user.department)
+                    departments.push(user.department.title)
                 })
 
                 return ['Все', ...getUniqueArrayItems(departments)]
@@ -135,7 +125,6 @@
 
             checkMemberRole(member) {
                 if(member.isHead || member.isPerformer || member.isMaster) {
-                    console.log(member.isHead, member.isMaster)
                     member.isMember = true
                 }
             },
@@ -171,9 +160,10 @@
 
                 if(this.filterOption && this.filterOption !== 'Все') {
                     let objKey = 'department'
+                    let innerObjKey = 'title'
 
                     let option = this.filterOption
-                    filteredData = filtration(filteredData, option, objKey)
+                    filteredData = filtration(filteredData, option, objKey, innerObjKey)
                 }
                
                 return filteredData
@@ -187,10 +177,22 @@
                     let isPerformer = false
 
                     if(this.$props.department) {
-                        member.department.title === this.$props.department ?
-                        isMember = true : null
-                        member.department.title === this.$props.department && member.department.isHead ?
-                        isHead = true : null
+                        
+                        if(this.$props.type !== 'task_create') {
+                            member.department.title === this.$props.department ?
+                            isMember = true : null
+                        }
+
+                        if(member.department.title === this.$props.department && member.department.isHead) {
+                            if(this.$props.type === 'department_update') {
+                                isHead = true
+                            }
+
+                            if(this.$props.type === 'task_create') {
+                                isMaster = true
+                                isMember = true
+                            }
+                        }
                     }
 
                     this.members.push({

@@ -32,7 +32,7 @@
                 v-model="department" 
                 :options="getDepartments()"
                 label="Отправить в отдел:"
-                @input="memberList = []"
+                @input="refreshMemberList()"
             />
 
             <q-input
@@ -50,9 +50,10 @@
 
             <q-btn @click="isMemberSelectionOpened = !isMemberSelectionOpened">Выбор состава задачи</q-btn>
 
-            <q-dialog v-model="isMemberSelectionOpened" transition-show="fade" transition-hide="fade" full-width>
-                <q-card style="height: 50vh; " class="flex column no-wrap q-pa-lg" >
+            <q-dialog v-model="isMemberSelectionOpened" transition-show="fade" transition-hide="fade" full-width persistent>
+                <q-card style="height: 50vh;" class="flex column no-wrap q-pa-lg" >
                     <UserSelection
+                        :department="this.department"
                         :type="'task_create'"
                         :users="filteredUserList()"
                         @memberList="fillMemberList"
@@ -132,7 +133,7 @@
 
                 submit: true,
                 isMemberSelectionOpened: false,
-                memberList: []
+                memberList: [],
             }
         },
 
@@ -142,6 +143,12 @@
             fillMemberList(members) {
                 this.memberList = members
                 this.isMemberSelectionOpened = false
+            },
+
+            refreshMemberList() {
+                this.memberList = []
+                
+                this.department !== 'Без привязки к отделу' ? this.isMemberSelectionOpened = true : null
             },
 
             filteredUserList() {

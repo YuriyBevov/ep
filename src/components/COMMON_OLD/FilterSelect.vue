@@ -32,6 +32,10 @@
                 this.option = ''
                 this.emitFilterOption()
             }
+        },
+
+        mounted() {
+            console.log(this.$props.filterOptions)
         }
     }
 </script>

@@ -6,8 +6,8 @@ const actions = {
         axiosInstance.get('/init/init_app')
         .then(() => {
             dispatch('user/GET_USER_LIST', {}, {root: true})
-            dispatch('task/GET_TASK_LIST', {}, {root: true})
-            dispatch('department/GET_DEPARTMENT_LIST', {}, {root: true})
+            //dispatch('task/GET_TASK_LIST', {}, {root: true})
+            //dispatch('department/GET_DEPARTMENT_LIST', {}, {root: true})
         })
         .catch(err => console.log(err))
     }

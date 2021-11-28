@@ -15,7 +15,7 @@
                     <q-item-label>{{this.currentTask.title}} от {{setDate(this.currentTask.created)}}</q-item-label>
                 </q-item-section>
                 </q-item>
-{{this.currentTask}}
+
                 <q-item clickable v-ripple class="flex column">
                     <q-item-section>
                     <q-item-label overline>Описание задачи:</q-item-label>

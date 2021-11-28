@@ -1,16 +1,33 @@
 // app global css in SCSS form
 
 .cmn{
-    &__list {
+    &-list {
         margin: 0;
         list-style: none;
     }
 
-    &__text {
+    &-text {
         &--ellipsys {
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
         }
+    }
+}
+
+.scroll-container {
+    max-height: 65vh; 
+    overflow-y: auto;
+    
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 3px;
+        background-color: #b4dde6;
+        border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #2a4d6b;
+        border-radius: 5px;
     }
 }

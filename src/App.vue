@@ -2,27 +2,27 @@
     <div id="q-app">
         <router-view />
 
-        <Loader
+        <!--<Loader
             :loadingState="loadingState"
         />
 
         <ServerAnswerModal
             :modalText="serverAnswerData.message"
             :status="serverAnswerData.isOpened"
-        />
+        /> -->
     </div>
 </template>
 <script>
   import { mapGetters, mapActions } from 'vuex'
-  import Loader from "components/COMMON/Loader"
-  import ServerAnswerModal from "components/COMMON/ServerAnswerModal"
+  //import Loader from "components/COMMON/Loader"
+  //import ServerAnswerModal from "components/COMMON/ServerAnswerModal"
 
   export default {
       name: 'App',
 
       components: {
-        Loader,
-        ServerAnswerModal
+        //Loader,
+        //ServerAnswerModal
       },
 
       methods: {
