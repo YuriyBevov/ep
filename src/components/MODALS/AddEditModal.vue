@@ -1,100 +1,40 @@
 <template>
-    <q-dialog v-model="this.isOpen" persistent full-width position="bottom">
-        <q-card >
-            <div class="bg-primary q-pa-sm q-py-md text-white">  
-                <span class="text-h5">
-                    Новый пользователь
+    <q-dialog v-model="this.isOpen" persistent full-width position="bottom" class="q-pa-none">
+        <q-card class="q-pa-none" style="width: 100%; max-width: 75vw; min-height: 75vh;">
+            <div class="sticky-header bg-primary text-white d-flex items-center row q-mt-auto q-pa-sm" color="primary">
+                <span class="q-mr-auto">
+                    {{
+                        this.$props.dataType === 'user' && this.$props.actionType === 'add'             ? 'Добавить сотрудника'           :
+                        this.$props.dataType === 'user' && this.$props.actionType === 'edit'            ? 'Редактировать сотрудника'      :
+
+                        this.$props.dataType === 'task' && this.$props.actionType === 'add'             ? 'Создать задачу'                :
+                        this.$props.dataType === 'task' && this.$props.actionType === 'edit'            ? 'Редактировать задачу'          :
+
+                        this.$props.dataType === 'project' && this.$props.actionType === 'add'          ? 'Создать проект'                :
+                        this.$props.dataType === 'project' && this.$props.actionType === 'edit'         ? 'Редактировать проект'          :
+
+                        this.$props.dataType === 'project-group' && this.$props.actionType === 'add'    ? 'Создать группу проектов'       :
+                        this.$props.dataType === 'project-group' && this.$props.actionType === 'edit'   ? 'Редактировать группу проектов' : null
+                    }}
                 </span>
-            </div> 
 
-            <div class="q-pa-sm">
-                <q-form
-                    @submit="onSubmit"
-                >
-                    <q-input
-                        v-model="userData.login"
-                        :label="!this.userData.login ? 'User_' + this.currentOrdinalNumber : 'Login:'"
-                        hint="LogIn"
-                    />
+                <q-btn flat label="Закрыть" color="white"  @click="$emit('closeModal')"/>
+            </div>
 
-                    <q-input 
-                        v-model="userData.password" 
-                        :type="isPwdVisible ? 'text' : 'password'" 
-                        hint="Пароль: *"
-                        :rules="[
-                            val => !!val || '* Поле обязательно для заполнения',
-                            val => val.length > 5 || '* Пароль должен быть больше пяти символов'
-                        ]"
-                        lazy-rules
-                    >
-                        <template v-slot:append>
-                        <q-icon
-                            :name="isPwdVisible ? 'visibility_off' : 'visibility'"
-                            class="cursor-pointer"
-                            @click="isPwdVisible = !isPwdVisible"
-                        />
-                        </template>
-                    </q-input>
+            <div class="q-pa-sm" v-if="this.$props.dataType === 'user' ">
+                user{{this.$props}}
+            </div>
 
-                    <q-input 
-                        v-model="userData.confirmPassword" 
-                        :type="isPwdVisible ? 'text' : 'password'" 
-                        hint="Подтверждение пароля: *"
-                        :rules="[
-                            val => !!val || 'Поле не может быть пустым',
-                            val => val === this.userData.password || '* Пароли не совпадают'
-                        ]"
-                        lazy-rules
-                    >
-                        <template v-slot:append>
-                        <q-icon
-                            :name="isPwdVisible ? 'visibility_off' : 'visibility'"
-                            class="cursor-pointer"
-                            @click="isPwdVisible = !isPwdVisible"
-                        />
-                        </template>
-                    </q-input>
+            <div class="q-pa-sm" v-if="this.$props.dataType === 'task' ">
+                task{{this.$props}}
+            </div>
 
-                    <q-input
-                        v-model="userData.name"
-                        hint="Имя: *"
-                        lazy-rules
-                        :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
-                    />
+            <div class="q-pa-sm" v-if="this.$props.dataType === 'project' ">
+                project{{this.$props}}
+            </div>
 
-                    <q-input
-                        v-model="userData.surname"
-                        hint="Фамилия: *"
-                        lazy-rules
-                        :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
-                    />
-
-                    <q-select 
-                        v-model="userData.roles" 
-                        multiple
-                        :options="['Админ', 'Пользователь', 'Гость']" 
-                        hint="Роль: *"
-                        lazy-rules
-                        :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
-                    />
-
-                    <q-input
-                        v-model="userData.email"
-                        hint="E-mail:"
-                    />
-
-                    <q-input
-                        v-model="userData.phone"
-                        hint="Телефон:"
-                        label="+7(###)###-##-##"
-                        mask="+7(###)###-##-##"
-                    />
-
-                    <q-card-actions align="right" class="q-mt-auto">
-                        <q-btn flat label="Отмена" color="primary"  @click="onReset()"  />
-                        <q-btn flat label="Создать" color="primary" type="submit" />
-                    </q-card-actions>
-                </q-form>
+            <div class="q-pa-sm" v-if="this.$props.dataType === 'project-group' ">
+                project-group{{this.$props}}
             </div>
         </q-card>
     </q-dialog>
@@ -104,68 +44,38 @@
     import { mapGetters } from 'vuex'
 
     export default {
-        name: 'AddModal',
+        name: 'AddEditModal',
 
         props: {
-            type:       { type: String },
-            isOpened:   { type: Boolean }
+            data:   { type: Object  },
+            actionType: { type: String },
+            dataType: { type: String },
+            isOpened:   { type: Boolean },
+        },
+
+        data() {
+            return {
+                modalData: (typeof (this.$props.data !== 'undefined') ? this.$props.data : {} ),
+                isOpen: this.$props.isOpened,
+            }
+        },
+
+        methods: {
+            
+        },
+
+        watch: {
+            isOpened(newVal, oldVal) {
+                newVal != oldVal ? this.isOpen = !this.isOpen : null
+            }
         },
 
         computed: {
             ...mapGetters('user', ['currentOrdinalNumber']),
         },
 
-        mounted() {
-            this.fillData
-        },
-
-        data() {
-            return {
-                isPwdVisible: false,
-                isOpen: this.$props.isOpened,
-
-                userData: {
-                    login: '',
-                    password: '',
-                    confirmPassword: '',
-                    name: '',
-                    surname: '',
-                    phone: '',
-                    email: '',
-                    roles: []
-                }
-            }
-        },
-
-        methods: {
-            refreshData() {
-                this.userData = {
-                    login: '',
-                    password: '',
-                    confirmPassword: '',
-                    name: '',
-                    surname: '',
-                    phone: '',
-                    email: '',
-                    roles: []
-                }
-            },
-
-            onSubmit() {
-                this.refreshData()
-                this.$emit('saveData', this.userData)
-            },
-
-            onReset() {
-                this.refreshData()
-                this.$emit('closeModal')
-            },            
-        },      
-
-        watch: {
-            isOpened(newVal, oldVal) {
-                newVal === true ? this.isOpen = true : this.isOpen = false
-            }
+        components: {
+            // DataItem
         }
     }
 </script>

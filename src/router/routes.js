@@ -23,12 +23,26 @@ const routes = [
       // не защищенный пока(логин)
       //{ path: '/login', component: () => import('pages/USER/Login.vue') },
 
+      { path: '/', component: () => import('pages/index.vue') },
+
+      /* chart, calendar, chat*/
       { path: '/charts', component: () => import('pages/Charts.vue') },
       { path: '/calendar', component: () => import('pages/Calendar.vue') },
+      { path: '/chat', component: () => import('pages/Chat.vue') },
+
+      /* main-pages */
       { path: '/users', component: () => import('pages/Users.vue') },
-      { path: '/user/:id', component: () => import('pages/UserInfo.vue') },
       { path: '/tasks', component: () => import('pages/Tasks.vue') },
       { path: '/projects', component: () => import('pages/Projects.vue') },
+      { path: '/departments', component: () => import('pages/Departments.vue') },
+
+      /* info-pages */
+      { path: '/user/:id', component: () => import('pages/UserPage.vue') },
+      { path: '/project/:id', component: () => import('pages/ProjectPage.vue') },
+      { path: '/task/:id', component: () => import('pages/TaskPage.vue') },
+      { path: '/projectGroup/:id', component: () => import('pages/ProjectGroupPage.vue') },
+      { path: '/department/:id', component: () => import('pages/DepartmentPage.vue') },
+
     ]
   },
 

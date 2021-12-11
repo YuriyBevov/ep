@@ -5,86 +5,139 @@
             <h3 class="q-ma-none q-mb-sm">Статистика</h3>
         </div>
 
-        <div class="q-mb-sm">
-            <q-tabs
-                v-model="tab"
-                no-caps
-                outside-arrows
-                mobile-arrows
-                class="bg-secondary text-white shadow-2"
-            >
-                
-                <q-tab name="common" label="Общая" />
-                <q-tab name="projects" label="Проекты" />
-                <q-tab name="tasks" label="Задачи" />
-                <q-tab name="users" label="Пользователи" />
-            </q-tabs>
+        <div class="flex row flex-wrap">
+            
+            <div class="d-flex column col-6 q-pa-lg">
+                <PieChart    :data="pieChartData" :title="'Группы проектов:'"/>
+            </div>
+
+            <div class="d-flex column col-6 q-pa-lg">
+                <div class="q-mb-md">
+                    <FunnelChart :data="funnelChartData" :title="'Проекты в текущем месяце:'"/>
+                </div>
+                <div class="q-pa-md q-mt-auto" style="border: 1px solid #dedede;">
+                    <span>Проектов выполнено за год: 682</span>
+                </div>
+            </div>
+
+            <div class="col-12 q-pa-lg">
+                <BarChart  :data="barChartData" :title="'Период: '"/>
+            </div>
         </div>
-
-        <div class="">
-            <q-tab-panels
-                v-model="tab"
-                animated
-                swipeable
-                vertical
-                transition-prev="jump-up"
-                transition-next="jump-up"
-            >
-                <q-tab-panel name="common">
-                    <q-list
-                    bordered separator 
-                        class="stat-list d-flex row"
-                        style="border-radius: 15px;"
-                    >
-                        <q-item class="stat-list__item row col-6 q-pa-none d-flex items-center justify-between">
-                            <div 
-                                style="border: 1px solid red;"
-                                class="q-pa-md"
-                            ><span class="text-secondary col-7" style="font-size: 24px;">Групп проектов:</span></div>
-                            <div 
-                                class="q-pa-md"
-                            >
-                                <span class="text-primary d-flex items-center justify-center" style="font-size: 30px;">15</span></div>
-                            
-                        </q-item>
-
-                        <q-item class="stat-list__item row col-6 q-pa-none d-flex items-center justify-between">
-                            <span class="text-secondary col-7" style="font-size: 24px;">Проектов в работе:</span>
-                            <span class="text-primary d-flex items-center justify-center" style="font-size: 30px;">135</span>
-                        </q-item>
-                    </q-list>
-                </q-tab-panel>
-
-                    
-                <q-tab-panel name="projects" class="q-pa-none"> 
-                    
-                </q-tab-panel>
-    
-                <q-tab-panel name="tasks">
-                    
-                </q-tab-panel>
-
-                <q-tab-panel name="users">
-                    
-                </q-tab-panel>
-
-            </q-tab-panels>
-        </div>       
     </div>
 </template>
+
 <script>
-    
+    import PieChart from 'src/components/charts/PieChart'
+	import FunnelChart from 'src/components/charts/FunnelChart'
+    import BarChart from 'src/components/charts/BarChart'
 
     export default {
         name: 'Tasks',
 
         components: {
-            
+            PieChart,
+            FunnelChart,
+            BarChart
         },
         
         data() {
             return {
-                tab: 'common'
+                tab: 'common',
+
+                barChartData: [{
+                        "month": "Янв",
+                        "projects": 23,
+                        "tasks": 250
+                    }, {
+                        "month": "Фев",
+                        "projects": 12,
+                        "tasks": 140
+                    }, {
+                        "month": "Март",
+                        "projects": 18,
+                        "tasks": 69
+                    }, {
+                        "month": "Апр",
+                        "projects": 4,
+                        "tasks": 14
+                    }, {
+                        "month": "Май",
+                        "projects": 64,
+                        "tasks": 189
+                    }, {
+                        "month": "Июнь",
+                        "projects": 23,
+                        "tasks": 220
+                    }, {
+                        "month": "Июль",
+                        "projects": 6,
+                        "tasks": 58
+                    }, {
+                        "month": "Авг",
+                        "projects": 46,
+                        "tasks": 123
+                    }, {
+                        "month": "Сен",
+                        "projects": 94,
+                        "tasks": 94
+                    }, {
+                        "month": "Окт",
+                        "projects": 56,
+                        "tasks": 84
+                    }, {
+                        "month": "Ноя",
+                        "projects": 0,
+                        "tasks": 0
+                    }, {
+                        "month": "Дек",
+                        "projects": 0,
+                        "tasks": 0
+                    }
+                ],
+
+                funnelChartData: [
+                    {
+                        "name": "В работе",
+                        "value": 17,
+                    }, 
+                    {
+                        "name": "Приостановленные",
+                        "value": 25
+                    }, 
+                    {
+                        "name": "Завершенные проекты",
+                        "value": 37
+                    }
+                ],
+
+				pieChartData: [
+					{
+						"title": "Ароматный мир",
+						"value": 11
+                    }, 
+                    
+                    {
+						"title": "Винлаб",
+						"value": 2
+                    }, 
+                    
+                    {
+						"title": "Аптека для бережливых",
+						"value": 13
+                    }, 
+                    
+                    {
+						"title": "Всякий хлам",
+						"value": 16
+                    }, 
+                    
+                    {
+                    	"title": "Свои проекты",
+                    	"value": 9
+                    },
+				],
+				
             }
         },
     }
@@ -140,5 +193,24 @@
         }
         
     }
+
+    .legend-item {
+		display: flex;
+		align-items: center;
+		margin-bottom: 10px;
+        cursor: pointer;
+	}
+
+	.legend-title {
+		margin-right: auto;
+	}
+
+	.legend-marker {
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		margin-right: 20px;
+        
+	}
 </style>
 

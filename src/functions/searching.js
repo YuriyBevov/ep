@@ -1,4 +1,5 @@
 export function searching(arr, text, objKey) {
+    console.log(arr, text, objKey)
     let result = []
     
     let searchText = text.trim().toLowerCase()

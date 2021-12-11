@@ -35,26 +35,26 @@
       <q-scroll-area class="fit">
         <q-list class="q-pa-none">
           <!--v-if="roles && roles.find(role => role === 'admin')"-->
-            <q-item clickable v-ripple :to="'/calendar'">
+            <q-item clickable v-ripple :to="'/'">
               <q-item-section avatar>
-                <q-icon name="date_range" color="primary"/>
+                <q-icon name="keyboard_alt" color="primary"/>
               </q-item-section>
               <q-item-section>
-                Календарь
+                Кабинет
               </q-item-section>
             </q-item>
 
-            <q-separator />          
-
-            <q-item clickable v-ripple :to="'/charts'">
+            <q-separator />
+            
+            <q-item clickable v-ripple :to="'/tasks'">
               <q-item-section avatar>
-                <q-icon name="stacked_bar_chart" color="primary"/>
+                <q-icon name="task" color="primary"/>
               </q-item-section>
               <q-item-section>
-                Статистика
+                Задачи
               </q-item-section>
             </q-item>
-  
+
             <q-separator />
 
             <q-item clickable v-ripple :to="'/projects'">
@@ -67,26 +67,61 @@
             </q-item>
 
             <q-separator />
-  
-            <q-item clickable v-ripple :to="'/tasks'">
+
+            <q-item clickable v-ripple :to="'/calendar'">
               <q-item-section avatar>
-                <q-icon name="task" color="primary"/>
+                <q-icon name="date_range" color="primary"/>
               </q-item-section>
               <q-item-section>
-                Задачи
+                Календарь
               </q-item-section>
             </q-item>
 
             <q-separator />
-  
+            
             <q-item clickable v-ripple :to="'/users'">
               <q-item-section avatar>
                 <q-icon name="people" color="primary"/>
               </q-item-section>
               <q-item-section>
-                Пользователи
+                Сотрудники
               </q-item-section>
             </q-item>
+
+            <q-separator />
+
+            <q-item clickable v-ripple :to="'/departments'">
+              <q-item-section avatar>
+                <q-icon name="apartment" color="primary"/>
+              </q-item-section>
+              <q-item-section>
+                Отделы
+              </q-item-section>
+            </q-item>
+
+            <q-separator />
+
+            <q-item clickable v-ripple :to="'/charts'">
+              <q-item-section avatar>
+                <q-icon name="stacked_bar_chart" color="primary"/>
+              </q-item-section>
+              <q-item-section>
+                Статистика
+              </q-item-section>
+            </q-item>
+  
+            <q-separator />
+
+            <q-item clickable v-ripple :to="'/chat'">
+              <q-item-section avatar>
+                <q-icon name="chat" color="primary"/>
+              </q-item-section>
+              <q-item-section>
+                Чат
+              </q-item-section>
+            </q-item>
+
+            <q-separator />
         </q-list>
       </q-scroll-area>
     </q-drawer>
