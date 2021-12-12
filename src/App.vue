@@ -47,4 +47,14 @@
     a {
         text-decoration: none;
     }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background-color: #bdbdbd;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #2a4d6b;
+    }
 </style>
