@@ -1,15 +1,23 @@
 <template>
     <div class="">
-        <div class="q-pa-sm">
-            <h3 class="q-ma-none q-mb-sm">Календарь событий</h3>
+        <div class="q-pa-sm flex" style="position: relative;">
+            <h3 class="q-ma-none q-mb-sm q-mr-auto">Календарь событий</h3>
+            <q-btn :icon="'add'" outline color="primary" @click="addEditModalType = 'add', isAddEditModalOpened = true"/>
         </div>
-        <div class="">
+        <div >
             <FullCalendar :options="calendarOptions" />
         </div>
+        <AddEditModal
+            :isOpened="this.isAddEditModalOpened"
+            :actionType="this.addEditModalType"
+            :dataType="'task'"
+            @closeModal="isAddEditModalOpened = false"
+        />
     </div>
 </template>
 
 <script>
+    import AddEditModal from 'src/components/modals/AddEditModal'
     import FullCalendar from '@fullcalendar/vue'
     import dayGridPlugin from '@fullcalendar/daygrid'
     import timeGridPlugin from '@fullcalendar/timegrid'
@@ -23,18 +31,22 @@
 
     name: 'Calendar',
       components: {
-        FullCalendar // make the <FullCalendar> tag available
+        FullCalendar, // make the <FullCalendar> tag available
+        AddEditModal    
       },
 
       data() {
         return {
+          isAddEditModalOpened: false,
+          addEditModalType: '',
+
           calendarOptions: {
             plugins: [ dayGridPlugin, timeGridPlugin,  interactionPlugin, listPlugin ],
 
             headerToolbar: {
               left: 'prev,next today',
               center: 'title',
-              right: 'listWeek,dayGridMonth,timeGridWeek,timeGridDay'
+              right: 'listWeek,timeGridDay,timeGridWeek,dayGridMonth'
             },
 
             slotLabelFormat: {
@@ -53,11 +65,11 @@
             initialView: 'dayGridMonth',
             initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
 
-            slotDuration: '01:00:00',
+            slotDuration: '00:15:00',
             locale: ruLocale,
-            editable: false,   // перемещение события по календарю
+            editable: true,   // перемещение события по календарю
             selectable: false, // создание нового события при клике на день календаря
-            eventMinHeight: 80, // мин. высота события
+            eventMinHeight: 30, // мин. высота события
             scrollTime: '08:00:00', // с какого времени показывать календарь
             displayEventEnd: true, // показывать окончание события
             displayEventTime: true, // показывать время события
@@ -69,8 +81,8 @@
                 }
             },
             
-            eventDisplay: 'auto',
-            eventMaxStack: 3, // макс кол-во событий
+            eventDisplay: 'list',
+            eventMaxStack: 10, // макс кол-во событий
             nowIndicator: true, // индикатор текущего времени
 
             moreLinkClassNames: 'fc-crm-more-link', // класс для количества событий
@@ -90,9 +102,9 @@
             contentHeight: 500, // высота контента календаря
             
             selectMirror: true,
-            dayMaxEvents: true,
+            dayMaxEvents: false,
             weekends: true,
-            allDaySlot: false, // показывать ячейку событий на целый день
+            allDaySlot: true, // показывать ячейку событий на целый день
             
             select: this.handleDateSelect,
             eventClick: this.handleEventClick,
@@ -118,32 +130,32 @@
         handleEventChange(arg) {
             console.log('change',arg)
         },
-            handleWeekendsToggle() {
-                this.calendarOptions.weekends = !this.calendarOptions.weekends // update a property
-            },
-            handleDateSelect(selectInfo) {
-                let title = prompt('Please enter a new title for your event')
-                let calendarApi = selectInfo.view.calendar
-                calendarApi.unselect() // clear date selection
 
-                if (title) {
-                    calendarApi.addEvent({
-                    id: createEventId(),
-                    title,
-                    start: selectInfo.startStr,
-                    end: selectInfo.endStr,
-                    allDay: selectInfo.allDay
-                    })
-                }
-            },
-            handleEventClick(clickInfo) {
-                if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-                    clickInfo.event.remove()
-                }
-            },
-            handleEvents(events) {
-                this.currentEvents = events
+        handleWeekendsToggle() {
+            this.calendarOptions.weekends = !this.calendarOptions.weekends // update a property
+        },
+        handleDateSelect(selectInfo) {
+            let title = prompt('Please enter a new title for your event')
+            let calendarApi = selectInfo.view.calendar
+            calendarApi.unselect() // clear date selection
+
+            if (title) {
+                calendarApi.addEvent({
+                id: createEventId(),
+                title,
+                start: selectInfo.startStr,
+                end: selectInfo.endStr,
+                allDay: selectInfo.allDay
+                })
             }
+        },
+        handleEventClick(clickInfo) {
+            this.addEditModalType = 'edit'
+            this.isAddEditModalOpened = true
+        },
+        handleEvents(events) {
+            this.currentEvents = events
+        }
       }
     }
 </script>
@@ -470,7 +482,7 @@
     }
 
     .fc-timegrid-body tr {
-        height: 80px;
+        height: 30px;
 
         .fc-timegrid-slot-label-frame {
             text-align: center;

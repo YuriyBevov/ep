@@ -126,7 +126,6 @@
         <AddEditModal
             :isOpened="this.isAddEditModalOpened"
             :actionType="'add'"
-            :type="AddEditModalType" 
             :dataType="this.activeTab === 'project-group' ? 'project-group' : this.$props.dataType"
             @closeModal="isAddEditModalOpened = false"
         />

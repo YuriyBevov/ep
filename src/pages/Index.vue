@@ -58,22 +58,21 @@
         data() {
             return {
                 mainPageTabs: [
-                        
-
                         {
-                            name: 'calendar', label: 'Календарь',
+                            name: 'todo', label: 'Список дел',
                             active: true,
                             options: { 
-                                components: ['Calendar'], 
-                                /*data: массив моих задач*/
+                                components: ['ToDo'],
+                                /*data: массив текущих заметок*/
                             }
                         },
 
                         {
-                            name: 'todo', label: 'Список дел',
+                            name: 'calendar', label: 'Календарь',
+                            
                             options: { 
-                                components: ['ToDo'],
-                                /*data: массив текущих заметок*/
+                                components: ['Calendar'], 
+                                /*data: массив моих задач*/
                             }
                         },
 
