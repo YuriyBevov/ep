@@ -56,7 +56,7 @@ const actions = {
         .catch((err) => {
             console.log('auth not')
             localStorage.removeItem('token')
-            this.$router.push('/login')
+            //this.$router.push('/login')
         })
         .finally(() => {
             dispatch('common/CHANGE_LOADING_STATE', false, { root: true })

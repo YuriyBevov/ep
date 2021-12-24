@@ -65,11 +65,11 @@
             initialView: 'dayGridMonth',
             initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
 
-            slotDuration: '00:15:00',
+            slotDuration: '00:10:00',
             locale: ruLocale,
             editable: true,   // перемещение события по календарю
             selectable: false, // создание нового события при клике на день календаря
-            eventMinHeight: 30, // мин. высота события
+            eventMinHeight: 100, // мин. высота события
             scrollTime: '08:00:00', // с какого времени показывать календарь
             displayEventEnd: true, // показывать окончание события
             displayEventTime: true, // показывать время события
@@ -81,8 +81,8 @@
                 }
             },
             
-            eventDisplay: 'list',
-            eventMaxStack: 10, // макс кол-во событий
+            eventDisplay: 'block',
+            eventMaxStack: 3, // макс кол-во событий
             nowIndicator: true, // индикатор текущего времени
 
             moreLinkClassNames: 'fc-crm-more-link', // класс для количества событий
@@ -103,6 +103,7 @@
             
             selectMirror: true,
             dayMaxEvents: false,
+            expandRows: true,
             weekends: true,
             allDaySlot: true, // показывать ячейку событий на целый день
             
@@ -163,6 +164,19 @@
 <style lang='scss'>
         .fc {
             max-width: 100% !important;
+        }
+
+        .fc-daygrid-event-harness {
+            a {
+                background-color: #35706a;
+                height: 40px;
+                white-space: normal;
+            }
+
+            .fc-event-main-frame {
+                display: flex;
+                flex-direction: column;
+            }
         }
 
         .fc-header-toolbar {
@@ -428,6 +442,16 @@
             border-radius: 0;
         }
 
+        .fc-daygrid-event {
+            border-top: 0;
+            border-right: 0;
+            border-bottom: 0;
+            border-width: 5px;
+            &.meeting-event {
+                border-color: $purple-6 !important;
+            }
+        }
+
         .fc-timegrid-event {
             border-top: 0;
             border-right: 0;
@@ -482,7 +506,7 @@
     }
 
     .fc-timegrid-body tr {
-        height: 30px;
+        height: 100%;
 
         .fc-timegrid-slot-label-frame {
             text-align: center;

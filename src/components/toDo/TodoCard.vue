@@ -25,7 +25,7 @@
                 @click="openTask()"
             >
                 <q-card-section>
-                    {{data.name}}
+                    12:00 Монтаж ул.Крыленко
                 </q-card-section>
             </q-card>
         </div>
